@@ -3,7 +3,7 @@
       branches:
         - '*'
   jobs:
-    build:
+    build_a:
       runs-on: ubuntu-18.04
       steps:
         - uses: actions/cache@v2
