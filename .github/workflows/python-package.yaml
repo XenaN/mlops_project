@@ -6,6 +6,7 @@
     build_a:
       runs-on: self-hosted #ubuntu-latest
       steps:
+        - uses: actions/checkout@v3
         - name: Cache dependencies
           uses: actions/cache@v3
           id: cache-venv
