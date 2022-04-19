@@ -19,23 +19,25 @@
         - run: |
             python --version
             python -m venv ./venv
+            source ./venv/bin/activate
+            pip install -r requirements.txt
           if: steps.cache-venv.outputs.cache-hit != 'true'
         - run: echo "This job will be run first."
 
-    test_a:
-      runs-on: ubuntu-18.04
+    type_test:
+      runs-on: self-hosted
       needs: [build_a]
       steps:
         - run: echo "This job will run after build_a have finished"
 
     test_b:
-      runs-on: ubuntu-18.04
+      runs-on: self-hosted
       needs: [build_a]
       steps:
         - run: echo "This job will run after build_a have finished, it is parallel test_a"
 
     deploy_ab:
-      runs-on: ubuntu-18.04
+      runs-on: self-hosted
       needs: [test_a, test_b]
       steps:
         - run: echo "This job will run after test_a and test_ab is complete"
