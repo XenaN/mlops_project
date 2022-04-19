@@ -7,7 +7,7 @@
       runs-on: self-hosted #ubuntu-latest
       steps:
         - name: Cache dependencies
-          uses: actions/cache@v2
+          uses: actions/cache@v3
           id: cache-venv
           with:
             path: |
