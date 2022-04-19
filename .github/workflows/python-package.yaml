@@ -38,6 +38,6 @@
 
     deploy_ab:
       runs-on: self-hosted
-      needs: [test_a, test_b]
+      needs: [type_test, test_b]
       steps:
         - run: echo "This job will run after test_a and test_ab is complete"
