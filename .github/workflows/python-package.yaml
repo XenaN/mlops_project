@@ -21,6 +21,7 @@
           run: |
             echo "Installing dependencies and caching them."
             python --version
+            ls
             python -m venv temp_venv
             source temp_venv/bin/activate
             pip install -r requirements.txt
