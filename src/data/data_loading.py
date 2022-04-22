@@ -57,7 +57,7 @@ def save_csv_from_url(pair_path_and_url: Tuple):
 
 def download_historical_data_from_discomap_urls(save_path: str, metadata_path: str,
                                                 countries: List, pollutants: List,
-                                                year_start: int, year_end: int):
+                                                year_start: int, year_end: int, n_cores: int):
     """
     Save historical data from discomap.eea.europa.eu urls
     :param save_path: path to save data
@@ -72,9 +72,9 @@ def download_historical_data_from_discomap_urls(save_path: str, metadata_path: s
                                                 year_start, year_end)
 
     with open(f'{save_path}urls.txt', 'r', encoding='utf-8-sig') as file:
-        urls = file.readlines()
+        urls = file.read().splitlines()
 
-    with Pool(processes=8) as pool:
+    with Pool(processes=n_cores) as pool:
         pool.map(save_csv_from_url, product([save_path], urls))
 
 
@@ -112,7 +112,8 @@ if __name__ == "__main__":
                                                 countries=metadata["countries"],
                                                 pollutants=metadata["pollutants"],
                                                 year_start=metadata["year_start"],
-                                                year_end=metadata["year_end"])
+                                                year_end=metadata["year_end"],
+                                                n_cores=8)
     download_updated_data_from_discomap(save_path=UPDATED_EEA_PATH,
                                         url=SERVICE_URL,
                                         countries=metadata["countries"],
