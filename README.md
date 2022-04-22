@@ -1,10 +1,15 @@
 # MLops project
 
 ### How to use:
-1. Istall all libraries
+1. After creation venv istall all libraries
 ```commandline
 pip install -r requirements.txt
 ```
+2. Run script *data_loading.py*. For now use terminal or pycharm configuration. 
+After ``if __name__ == "__main__"`` you can change input data according to *metadata/download_config.json*.
+If you run two functions in one day than updated data will be the same historical.
+All data is saved in *data/raw*.
+3. Run *data_raw_merge.py* to concatenate historical and updated data. Merged dataframes are saved into *data/interim*.
 
 
 ### Repo structure:
