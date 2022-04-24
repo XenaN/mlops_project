@@ -1,5 +1,6 @@
 import requests
 import json
+from pathlib import Path
 from typing import List, Tuple
 from datetime import date
 from multiprocessing import Pool
@@ -107,6 +108,9 @@ if __name__ == "__main__":
         "year_start": 2022,
         "year_end": 2022
     }
+
+    Path(HISTORICAL_EEA_PATH).mkdir(parents=True, exist_ok=True)
+    Path(UPDATED_EEA_PATH).mkdir(parents=True, exist_ok=True)
     download_historical_data_from_discomap_urls(save_path=HISTORICAL_EEA_PATH,
                                                 metadata_path=METADATA_PATH,
                                                 countries=metadata["countries"],
