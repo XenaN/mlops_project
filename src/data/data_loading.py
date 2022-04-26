@@ -1,9 +1,10 @@
 import requests
 import json
-from typing import List, Tuple
+from typing import Tuple
 from datetime import date
 from multiprocessing import Pool
 from itertools import product
+import pathlib
 
 import pandas as pd
 
@@ -14,33 +15,32 @@ UPDATED_EEA_PATH = '../../data/raw/updated_data_eea/'
 
 
 def download_urls_historical_data_from_discomap(save_path: str, metadata_path: str,
-                                                countries: List, pollutants: List,
+                                                country: str, pollutant: str,
                                                 year_start: int, year_end: int):
     """
     Save urls with historical data from discomap.eea.europa.eu
     :param save_path: path to save data
     :param metadata_path: path with metadata
-    :param countries: list of countries
-    :param pollutants: list of pollutant tags
+    :param country: tag of country
+    :param pollutant: tag of pollutant
     :param year_start: Year_from parameter
     :param year_end: Year_to parameter
     """
     with open(metadata_path) as json_file:
         metadata = json.load(json_file)
 
-    with open(f'{save_path}urls.txt', 'wb') as urls_file:
-        for country in countries:
-            for pollutant in pollutants:
-                download_file = f"https://fme.discomap.eea.europa.eu/fmedatastreaming/" \
-                                f"AirQualityDownload/AQData_Extract.fmw?CountryCode={country}&City" \
-                                f"Name=&Pollutant={metadata[pollutant]}&Year_from={year_start}" \
-                                f"&Year_to={year_end}&Station=&Samplingpoint=&" \
-                                f"Source=All&Output=TEXT&UpdateDate=&TimeCoverage=Year"
-                try:
-                    files = requests.get(download_file).content
-                    urls_file.write(files)
-                except Exception:
-                    print("Write fail")
+    with open(f'{save_path}{country}_{pollutant}_urls.txt', 'wb') as urls_file:
+
+        download_file = f"https://fme.discomap.eea.europa.eu/fmedatastreaming/" \
+                        f"AirQualityDownload/AQData_Extract.fmw?CountryCode={country}&City" \
+                        f"Name=&Pollutant={metadata[pollutant]}&Year_from={year_start}" \
+                        f"&Year_to={year_end}&Station=&Samplingpoint=&" \
+                        f"Source=All&Output=TEXT&UpdateDate=&TimeCoverage=Year"
+        try:
+            files = requests.get(download_file).content
+            urls_file.write(files)
+        except Exception:
+            print("Write fail")
 
 
 def save_csv_from_url(pair_path_and_url: Tuple):
@@ -56,50 +56,58 @@ def save_csv_from_url(pair_path_and_url: Tuple):
 
 
 def download_historical_data_from_discomap_urls(save_path: str, metadata_path: str,
-                                                countries: List, pollutants: List,
+                                                country: str, pollutant: str,
                                                 year_start: int, year_end: int, n_cores: int):
     """
     Save historical data from discomap.eea.europa.eu urls
     :param save_path: path to save data
     :param metadata_path: path with metadata
-    :param countries: list of countries
-    :param pollutants: list of pollutant tags
+    :param country: tag of country
+    :param pollutant: tag of pollutant
     :param year_start: Year_from parameter
     :param year_end: Year_to parameter
+    :param n_cores: number of cores
     """
     download_urls_historical_data_from_discomap(save_path, metadata_path,
-                                                countries, pollutants,
+                                                country, pollutant,
                                                 year_start, year_end)
 
-    with open(f'{save_path}urls.txt', 'r', encoding='utf-8-sig') as file:
+    with open(f'{save_path}{country}_{pollutant}_urls.txt', 'r', encoding='utf-8-sig') as file:
         urls = file.read().splitlines()
 
+    country_pollutant_path = f"{save_path}/{country}_{pollutant}/"
+    pathlib.Path(country_pollutant_path).mkdir(parents=True, exist_ok=True)
+
     with Pool(processes=n_cores) as pool:
-        pool.map(save_csv_from_url, product([save_path], urls))
+        pool.map(save_csv_from_url, product([country_pollutant_path], urls))
 
 
-def download_updated_data_from_discomap(save_path: str, url: str, countries: List, pollutants: List):
+def download_updated_data_from_discomap(save_path: str, metadata_path: str,
+                                        url: str, country: str, pollutant: str):
     """
     Save from discomap.eea.europa.eu updated data
     :param save_path: path to save data
+    :param metadata_path: path with metadata
     :param url: url with data
-    :param countries: list of countries
-    :param pollutants: list of pollutant tags
+    :param country: tag of country
+    :param pollutant: tag of pollutant
     """
-    for country in countries:
-        for pollutant in pollutants:
-            date_today = date.today().strftime("%Y%m%d")
-            file_name = f"{save_path}{country}_{pollutant}_{date_today}.csv"
-            download_file = f"{url}/{country}_{pollutant}.csv"
+    with open(metadata_path) as json_file:
+        metadata = json.load(json_file)
 
-            file = requests.get(download_file).content
-            output = open(file_name, 'wb')
-            output.write(file)
-            output.close()
+    date_today = date.today().strftime("%Y%m%d")
+
+    file_name = f"{save_path}{country}_{metadata[pollutant]}_{date_today}.csv"
+    download_file = f"{url}/{country}_{pollutant}.csv"
+
+    file = requests.get(download_file).content
+    output = open(file_name, 'wb')
+    output.write(file)
+    output.close()
 
 
 if __name__ == "__main__":
-    metadata = {
+    metadata_temp = {
         "countries":
             ["ES"],
         "pollutants":
@@ -107,15 +115,22 @@ if __name__ == "__main__":
         "year_start": 2022,
         "year_end": 2022
     }
-    download_historical_data_from_discomap_urls(save_path=HISTORICAL_EEA_PATH,
+
+    pathlib.Path(HISTORICAL_EEA_PATH).mkdir(parents=True, exist_ok=True)
+    pathlib.Path(UPDATED_EEA_PATH).mkdir(parents=True, exist_ok=True)
+
+    for one_country in metadata_temp["countries"]:
+        for one_pollutant in metadata_temp["pollutants"]:
+            download_historical_data_from_discomap_urls(save_path=HISTORICAL_EEA_PATH,
+                                                        metadata_path=METADATA_PATH,
+                                                        country=one_country,
+                                                        pollutant=one_pollutant,
+                                                        year_start=metadata_temp["year_start"],
+                                                        year_end=metadata_temp["year_end"],
+                                                        n_cores=8)
+            download_updated_data_from_discomap(save_path=UPDATED_EEA_PATH,
                                                 metadata_path=METADATA_PATH,
-                                                countries=metadata["countries"],
-                                                pollutants=metadata["pollutants"],
-                                                year_start=metadata["year_start"],
-                                                year_end=metadata["year_end"],
-                                                n_cores=8)
-    download_updated_data_from_discomap(save_path=UPDATED_EEA_PATH,
-                                        url=SERVICE_URL,
-                                        countries=metadata["countries"],
-                                        pollutants=metadata["pollutants"])
+                                                url=SERVICE_URL,
+                                                country=one_country,
+                                                pollutant=one_pollutant)
 
