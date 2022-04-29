@@ -2,7 +2,7 @@
   "countries":
           ["DE", "ES"],
   "pollutants":
-          ["CO", "PM10", "NO", "NO2", "SO2", "O3", "PM2.5"],
+          ["CO", "PM10", "NO2", "SO2", "O3", "PM2.5"],
   "year_start": 2021,
   "year_end": 2022
 }
