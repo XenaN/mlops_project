@@ -1,16 +1,17 @@
 import os
 import pathlib
 import json
+import click
 from datetime import date
 
 import pandas as pd
 
 
-INTERIM_UPDATED_EEA_PATH = '../../data/interim/updated_data_eea/'
-RAW_HISTORICAL_EEA_PATH = '../../data/raw/historical_data_eea/'
-RAW_UPDATED_EEA_PATH = '../../data/raw/updated_data_eea/'
-METADATA_PATH = '../../metadata/download_tags.json'
-CONFIG_PATH = '../../metadata/download_config.json'
+INTERIM_UPDATED_EEA_PATH = 'data/interim/updated_data_eea/'
+RAW_HISTORICAL_EEA_PATH = 'data/raw/historical_data_eea/'
+RAW_UPDATED_EEA_PATH = 'data/raw/updated_data_eea/'
+METADATA_PATH = 'metadata/download_tags.json'
+CONFIG_PATH = 'metadata/download_config.json'
 
 COLUMNS = {'network_countrycode': 'Countrycode',
            'network_localid': 'AirQualityNetwork',
@@ -26,29 +27,28 @@ COLUMNS = {'network_countrycode': 'Countrycode',
            'value_numeric': 'Concentration'}
 
 
-def merge_eea_data(country: str, pollutant: str, metadata_path: str, config_path: str):
+@click.command()
+@click.argument('pollutant', type=click.STRING)
+def merge_eea_data(pollutant: str):
     """
     This function concatenates historical and last updated datasets
-    :param country: tag of country
     :param pollutant: tag of pollutant
-    :param metadata_path: path with metadata
-    :param config_path: configuration file
     """
     date_today = date.today().strftime("%Y%m%d")
-    with open(metadata_path) as json_file:
+    with open(METADATA_PATH) as json_file:
         metadata = json.load(json_file)
 
-    with open(config_path) as json_file:
+    with open(CONFIG_PATH) as json_file:
         config = json.load(json_file)
 
     pathlib.Path(INTERIM_UPDATED_EEA_PATH).mkdir(parents=True, exist_ok=True)
     if len(os.listdir(INTERIM_UPDATED_EEA_PATH)) == 0:
-        path = f"{RAW_HISTORICAL_EEA_PATH}{country}_{pollutant}/"
+        path = f"{RAW_HISTORICAL_EEA_PATH}{config['country']}_{pollutant}/"
     else:
         path = INTERIM_UPDATED_EEA_PATH
 
     list_csv = os.listdir(path)
-    file_name = f"{RAW_UPDATED_EEA_PATH}{country}_{metadata[pollutant]}_{date_today}.csv"
+    file_name = f"{RAW_UPDATED_EEA_PATH}{config['country']}_{metadata[pollutant]}_{date_today}.csv"
     updated_data = pd.read_csv(file_name,
                                index_col=False,
                                encoding='latin1').rename(COLUMNS, axis='columns')
@@ -74,20 +74,8 @@ def merge_eea_data(country: str, pollutant: str, metadata_path: str, config_path
 
 
 if __name__ == "__main__":
-    metadata_temp = {
-        "countries":
-            ["ES"],
-        "pollutants":
-            ["CO"]
-    }
-
     pathlib.Path(INTERIM_UPDATED_EEA_PATH).mkdir(parents=True, exist_ok=True)
 
-    for one_country in metadata_temp["countries"]:
-        for one_pollutant in metadata_temp["pollutants"]:
-            merge_eea_data(country=one_country,
-                           pollutant=one_pollutant,
-                           metadata_path=METADATA_PATH,
-                           config_path=CONFIG_PATH)
+    merge_eea_data()
 
 
