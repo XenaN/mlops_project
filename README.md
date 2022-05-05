@@ -3,7 +3,7 @@
 ### How to use:
 1. After creation venv istall all libraries
 ```commandline
-pip install -r requirements.txt
+poetry install
 ```
 2. Run script *data_loading.py*. For now use terminal or pycharm configuration. 
 After ``if __name__ == "__main__"`` you can change input data according to *metadata/download_config.json*.
@@ -30,3 +30,6 @@ All data is saved in *data/raw*.
   - **features** - scripts to turn raw data into features for modeling
   - **models**   - scripts to train models and then use trained models to make predictions
   - **visualisation** - scripts to create exploratory and results oriented visualizations
+
+
+Authors: XenaN, Yaromir-hmel, inbfor
