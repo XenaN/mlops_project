@@ -7,7 +7,7 @@
         - main
 
   jobs:
-    build:
+    build_one:
       runs-on: ubuntu-latest
       steps:
         - name: Install Python 3.9
