@@ -31,7 +31,7 @@
           run: poetry install --no-interaction --no-root
 
         - name: Linter
-          run: flake8 $(git ls-files '*.py')
+          run: poetry run flake8 $(git ls-files '*.py')
 
         - name: Check Black
-          run: black --check $(git ls-files '*.py')
+          run: poetry run black --check $(git ls-files '*.py')
