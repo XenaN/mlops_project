@@ -10,6 +10,8 @@
     build_a:
       runs-on: ubuntu-latest
       steps:
+        - name: Install Poetry
+          uses: snok/install-poetry@v1
         - uses: actions/checkout@v3
         - name: Cache dependencies
           uses: actions/cache@v3
@@ -21,15 +23,9 @@
             key: ${{ runner.os }}-venv-${{ hashFiles('**/requirements*.txt') }}
             restore-keys: |
               ${{ runner.os }}-venv-
-        - name: Create venv and install requirements
+        - name: Install dependencies
           if: steps.cache.outputs.cache-hit != 'true'
-          run: |
-            echo "Installing dependencies and caching them."
-            python --version
-            pwd
-            python -m venv ./temp_venv
-            source ./temp_venv/bin/activate
-            pip install -r requirements.txt
+          run: poetry install --no-interaction --no-root
 
 
 
