@@ -9,6 +9,7 @@ stages:
       cmd: python src/data/data_loading_historical.py ${item} 8
       deps:
         - metadata/download_config.json
+        - src/data/data_loading_historical.py
       outs:
         - data/raw/historical_data_eea/${country}_${item}
 
@@ -19,3 +20,4 @@ stages:
       deps:
         - data/raw/historical_data_eea/
         - data/raw/updated_data_eea/
+        - src/data/data_raw_merge.py
