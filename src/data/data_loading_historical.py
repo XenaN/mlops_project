@@ -11,6 +11,7 @@ import pandas as pd
 
 SERVICE_URL = "http://discomap.eea.europa.eu/map/fme/latest"
 HISTORICAL_EEA_PATH = 'data/raw/historical_data_eea/'
+UPDATED_EEA_PATH = '../../data/raw/updated_data_eea/'
 TAGS_PATH = 'metadata/download_tags.json'
 METADATA_PATH = 'metadata/download_config.json'
 
@@ -50,7 +51,7 @@ def save_csv_from_url(pair_path_and_url: Tuple):
         dataset = pd.read_csv(pair_path_and_url[1], index_col=False)
         dataset.to_csv(f"{pair_path_and_url[0]}{pair_path_and_url[1].split('/')[-1]}", index=False)
     except Exception:
-        print("Save csv file fail")
+        print(f"Save csv file fail {pair_path_and_url[1]}")
 
 
 @click.command()
@@ -76,6 +77,8 @@ def download_historical_data_from_discomap_urls(pollutant: str, n_cores: int):
 
     with Pool(processes=n_cores) as pool:
         pool.map(save_csv_from_url, product([country_pollutant_path], urls))
+
+    pathlib.Path(UPDATED_EEA_PATH).mkdir(parents=True, exist_ok=True)
 
 
 if __name__ == "__main__":

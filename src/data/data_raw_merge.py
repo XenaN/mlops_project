@@ -41,6 +41,12 @@ def merge_eea_data(pollutant: str):
     with open(CONFIG_PATH) as json_file:
         config = json.load(json_file)
 
+    file_name = f"{RAW_UPDATED_EEA_PATH}{config['country']}_{metadata[pollutant]}_{date_today}.csv"
+
+    if len(os.listdir(RAW_UPDATED_EEA_PATH)) == 0:
+        print(f"{file_name} does not exist")
+        return
+
     pathlib.Path(INTERIM_UPDATED_EEA_PATH).mkdir(parents=True, exist_ok=True)
     if len(os.listdir(INTERIM_UPDATED_EEA_PATH)) == 0:
         path = f"{RAW_HISTORICAL_EEA_PATH}{config['country']}_{pollutant}/"
@@ -48,7 +54,6 @@ def merge_eea_data(pollutant: str):
         path = INTERIM_UPDATED_EEA_PATH
 
     list_csv = os.listdir(path)
-    file_name = f"{RAW_UPDATED_EEA_PATH}{config['country']}_{metadata[pollutant]}_{date_today}.csv"
     updated_data = pd.read_csv(file_name,
                                index_col=False,
                                encoding='latin1').rename(COLUMNS, axis='columns')
