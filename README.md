@@ -30,6 +30,3 @@ All data is saved in *data/raw*.
   - **features** - scripts to turn raw data into features for modeling
   - **models**   - scripts to train models and then use trained models to make predictions
   - **visualisation** - scripts to create exploratory and results oriented visualizations
-
-
-Authors: XenaN, Yaromir-hmel, inbfor

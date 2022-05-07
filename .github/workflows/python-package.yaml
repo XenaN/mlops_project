@@ -7,40 +7,31 @@
         - main
 
   jobs:
-    build_a:
+    build_one:
       runs-on: ubuntu-latest
       steps:
+        - name: Install Python 3.9
+          uses: actions/setup-python@v2
+          with:
+            python-version: 3.9
+
         - name: Install Poetry
           uses: snok/install-poetry@v1
+
         - uses: actions/checkout@v3
         - name: Cache dependencies
+          id: cached-poetry-dependencies
           uses: actions/cache@v3
-          id: cache-venv
           with:
-            path: |
-              venv/
-              .cache/pip
-            key: ${{ runner.os }}-venv-${{ hashFiles('**/requirements*.txt') }}
-            restore-keys: |
-              ${{ runner.os }}-venv-
+            path: .venv
+            key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
         - name: Install dependencies
-          if: steps.cache.outputs.cache-hit != 'true'
+          if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
           run: poetry install --no-interaction --no-root
 
-    type_test:
-      runs-on: ubuntu-latest
-      needs: [build_a]
-      steps:
-        - run: echo "This job will run after build_a have finished"
+        - name: Linter
+          run: poetry run flake8 $(git ls-files '*.py')
 
-    test_b:
-      runs-on: ubuntu-latest
-      needs: [build_a]
-      steps:
-        - run: echo "This job will run after build_a have finished, it is parallel test_a"
-
-    deploy_ab:
-      runs-on: ubuntu-latest
-      needs: [type_test, test_b]
-      steps:
-        - run: echo "This job will run after test_a and test_ab is complete"
+        - name: Check Black
+          run: poetry run black --check $(git ls-files '*.py')
