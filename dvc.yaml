@@ -21,3 +21,5 @@ stages:
         - data/raw/historical_data_eea/
         - data/raw/updated_data_eea/
         - src/data/data_raw_merge.py
+      outs:
+        - data/interim/updated_data_eea/${country}_${item}_historical_updated.csv

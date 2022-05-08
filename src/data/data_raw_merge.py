@@ -75,7 +75,7 @@ def merge_eea_data(pollutant: str):
             data_new['DatetimeEnd'] = data_new['DatetimeEnd'].apply(lambda x: x.replace(" +", "+"))
             data_new = data_new.drop_duplicates()
 
-            data_new.to_csv(f"{INTERIM_UPDATED_EEA_PATH}{file}", index=False)
+            data_new.to_csv(f"{INTERIM_UPDATED_EEA_PATH}{config['country']}_{pollutant}_historical_updated.csv", index=False)
 
 
 if __name__ == "__main__":
