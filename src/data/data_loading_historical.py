@@ -36,8 +36,12 @@ def download_urls_historical_data_from_discomap(country: str, pollutant: str,
                         f"&Year_to={year_end}&Station=&Samplingpoint=&" \
                         f"Source=All&Output=TEXT&UpdateDate=&TimeCoverage=Year"
         try:
-            files = requests.get(download_file).content
-            urls_file.write(files)
+            status = requests.get(download_file).status_code
+            if status < 300:
+                files = requests.get(download_file).content
+                urls_file.write(files)
+            else:
+                print(f"Request has status code {status}")
         except Exception:
             print("Write fail")
 
