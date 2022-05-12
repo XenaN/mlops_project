@@ -20,8 +20,10 @@ def download_updated_data_from_discomap(country: str, pollutant: str):
 
     date_today = date.today().strftime("%Y%m%d")
 
-    file_name = f"{UPDATED_EEA_PATH}{country}_{metadata[pollutant]}_" \
-                f"{date_today}.csv"
+    file_name = (
+        f"{UPDATED_EEA_PATH}{country}_{metadata[pollutant]}_"
+        f"{date_today}.csv"
+    )
     download_file = f"{SERVICE_URL}/{country}_{pollutant}.csv"
 
     status = requests.get(download_file).status_code

@@ -59,7 +59,7 @@ def save_csv_from_url(pair_path_and_url: Tuple):
         dataset = pd.read_csv(pair_path_and_url[1], index_col=False)
         dataset.to_csv(
             f"{pair_path_and_url[0]}{pair_path_and_url[1].split('/')[-1]}",
-            index=False
+            index=False,
         )
     except Exception:
         print(f"Save csv file fail {pair_path_and_url[1]}")
@@ -81,7 +81,7 @@ def download_historical_data_from_discomap_urls(pollutant: str, n_cores: int):
         metadata["country"],
         pollutant,
         metadata["year_start"],
-        metadata["year_end"]
+        metadata["year_end"],
     )
 
     with open(
@@ -91,8 +91,9 @@ def download_historical_data_from_discomap_urls(pollutant: str, n_cores: int):
     ) as file:
         urls = file.read().splitlines()
 
-    country_pollutant_path = f"{HISTORICAL_EEA_PATH}/{metadata['country']}_" \
-                             f"{pollutant}/"
+    country_pollutant_path = (
+        f"{HISTORICAL_EEA_PATH}/{metadata['country']}_" f"{pollutant}/"
+    )
     pathlib.Path(country_pollutant_path).mkdir(parents=True, exist_ok=True)
 
     with Pool(processes=n_cores) as pool:
