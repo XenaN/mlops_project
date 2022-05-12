@@ -30,7 +30,7 @@
           if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
           run: poetry install --no-interaction --no-root
 
-        - name: Check Black
+        - name: Run Black
           run: poetry run black --check $(git ls-files '*.py')
 
         - name: Linter
