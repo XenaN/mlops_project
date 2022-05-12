@@ -8,7 +8,6 @@ import pandas as pd
 
 
 INTERIM_UPDATED_EEA_PATH = "data/interim/updated_data_eea/"
-UPDATED_EEA_PATH = "../../data/raw/updated_data_eea/"
 RAW_HISTORICAL_EEA_PATH = "data/raw/historical_data_eea/"
 RAW_UPDATED_EEA_PATH = "data/raw/updated_data_eea/"
 METADATA_PATH = "metadata/download_tags.json"
@@ -36,7 +35,6 @@ def merge_eea_data(pollutant: str):
     This function concatenates historical and last updated datasets
     :param pollutant: tag of pollutant
     """
-    pathlib.Path(UPDATED_EEA_PATH).mkdir(parents=True, exist_ok=True)
     date_today = date.today().strftime("%Y%m%d")
     with open(METADATA_PATH) as json_file:
         metadata = json.load(json_file)
