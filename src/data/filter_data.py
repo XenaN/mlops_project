@@ -34,12 +34,12 @@ def filter_data(input_path: str, output_path: str):
         assert len(historical_data["UnitOfMeasurement"].unique()) == 1
 
         if historical_data["AirQualityStationEoICode"].unique()[0] == code:
-            table_filtered = pd.concat([table_filtered, historical_data],
-                                       axis=0)
+            table_filtered = pd.concat(
+                [table_filtered, historical_data], axis=0
+            )
 
     table_filtered.to_csv(output_path, index=False)
 
 
 if __name__ == "__main__":
     filter_data()
-

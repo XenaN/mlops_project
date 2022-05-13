@@ -41,11 +41,9 @@ def merge_eea_data(input_path: List[str], output_path: str):
 
     input_file = pathlib.Path(input_path[1])
     if input_file.is_file():
-        updated_data = pd.read_csv(input_path[1],
-                                   index_col=False,
-                                   encoding="latin1").rename(
-            COLUMNS, axis="columns"
-        )
+        updated_data = pd.read_csv(
+            input_path[1], index_col=False, encoding="latin1"
+        ).rename(COLUMNS, axis="columns")
     else:
         shutil.copyfile(input_path[0], output_path)
         return
@@ -66,7 +64,7 @@ def merge_eea_data(input_path: List[str], output_path: str):
     data_new = pd.concat(
         [
             historical_data,
-            updated_data.query("AirQualityStationEoICode == @code")
+            updated_data.query("AirQualityStationEoICode == @code"),
         ],
         axis=0,
         join="inner",

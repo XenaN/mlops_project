@@ -16,8 +16,11 @@ METADATA_PATH = "metadata/download_config.json"
 
 
 def download_urls_historical_data_from_discomap(
-        input_path: str, country: str,
-        pollutant: str, year_start: int, year_end: int
+    input_path: str,
+    country: str,
+    pollutant: str,
+    year_start: int,
+    year_end: int,
 ):
     """
     Save urls with historical data from discomap.eea.europa.eu
@@ -61,7 +64,7 @@ def save_csv_from_url(pair_path_and_url: Tuple):
         dataset = pd.read_csv(pair_path_and_url[1], index_col=False)
         dataset.to_csv(
             f"{pair_path_and_url[0]}{pair_path_and_url[1].split('/')[-1]}",
-            index=False
+            index=False,
         )
     except Exception:
         print(f"Save csv file fail {pair_path_and_url[1]}")
@@ -72,8 +75,8 @@ def save_csv_from_url(pair_path_and_url: Tuple):
 @click.argument("pollutant", type=click.STRING)
 @click.argument("n_cores", type=click.INT)
 def download_historical_data_from_discomap_urls(
-        input_path: str,
-        pollutant: str, n_cores: int):
+    input_path: str, pollutant: str, n_cores: int
+):
     """
     Save historical data from discomap.eea.europa.eu urls
     :param input_path: list of path with input data
@@ -88,7 +91,7 @@ def download_historical_data_from_discomap_urls(
         metadata["country"],
         pollutant,
         metadata["year_start"],
-        metadata["year_end"]
+        metadata["year_end"],
     )
 
     with open(
@@ -98,8 +101,9 @@ def download_historical_data_from_discomap_urls(
     ) as file:
         urls = file.read().splitlines()
 
-    country_pollutant_path = f"{input_path}/{metadata['country']}_" \
-                             f"{pollutant}/"
+    country_pollutant_path = (
+        f"{input_path}/{metadata['country']}_" f"{pollutant}/"
+    )
     pathlib.Path(country_pollutant_path).mkdir(parents=True, exist_ok=True)
 
     with Pool(processes=n_cores) as pool:
