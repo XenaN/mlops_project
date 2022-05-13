@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 
 
-METADATA_POLLUTANT_PATH = 'metadata/metadata_pollutants.yaml'
+METADATA_POLLUTANT_PATH = "metadata/metadata_pollutants.yaml"
 CONFIG_PATH = "metadata/download_config.json"
 
 
@@ -18,8 +18,9 @@ def change_units(df: pd.DataFrame, metadata: Dict, unit: str):
     :param metadata: molar mass info path
     :param unit: new unit
     """
-    assert df["UnitOfMeasurement"].unique() == ['mg/m3'] or \
-           df["UnitOfMeasurement"].unique() == ['µg/m3']
+    assert df["UnitOfMeasurement"].unique() == ["mg/m3"] or df[
+        "UnitOfMeasurement"
+    ].unique() == ["µg/m3"]
     assert len(df["AirPollutant"].unique()) == 1
 
     # The number 24.45 in the equations above is the volume (liters)
@@ -27,11 +28,15 @@ def change_units(df: pd.DataFrame, metadata: Dict, unit: str):
     # pressure is at 1 atmosphere and at 25°C.
     coefficient = 24.45
     k = 1
-    if df["UnitOfMeasurement"].unique() == ['µg/m3'] and unit == "ppm":
+    if df["UnitOfMeasurement"].unique() == ["µg/m3"] and unit == "ppm":
         k = 0.001
 
-    df["Concentration_correct"] = df["Concentration"] * coefficient * k / \
-                                  metadata[df["AirPollutant"].unique()[0]]
+    df["Concentration_correct"] = (
+        df["Concentration"]
+        * coefficient
+        * k
+        / metadata[df["AirPollutant"].unique()[0]]
+    )
 
 
 def get_subindex(I_low: int, I_hi: int, c_low: float, c_hi: float, c: float):
@@ -192,7 +197,7 @@ FUNCTION_MAP = {
     "NO2": get_NO2_subindex,
     "SO2": get_SO2_subindex,
     "PM10": get_PM10_subindex,
-    "PM2.5": getPM25_subindex
+    "PM2.5": getPM25_subindex,
 }
 
 
@@ -218,36 +223,66 @@ def create_common_dataset(input_path: str, output_path: str):
         dataset = pd.read_csv(path)
 
         assert len(dataset["UnitOfMeasurement"].unique()) == 1
-        if metadata["units"][pollutant] != dataset["UnitOfMeasurement"].unique()[0]:
-            change_units(dataset, metadata["molar_mass"], metadata["units"][pollutant])
+        if (
+            metadata["units"][pollutant]
+            != dataset["UnitOfMeasurement"].unique()[0]
+        ):
+            change_units(
+                dataset, metadata["molar_mass"], metadata["units"][pollutant]
+            )
         else:
             dataset["Concentration_correct"] = dataset["Concentration"]
 
         if metadata["average"][pollutant]["window"] > 1:
-            dataset[f"{pollutant}_avg"] = dataset["Concentration_correct"].rolling(
-                window=metadata["average"][pollutant]["window"],
-                min_periods=metadata["average"][pollutant]["period"]).mean().values
+            dataset[f"{pollutant}_avg"] = (
+                dataset["Concentration_correct"]
+                .rolling(
+                    window=metadata["average"][pollutant]["window"],
+                    min_periods=metadata["average"][pollutant]["period"],
+                )
+                .mean()
+                .values
+            )
         else:
             dataset[f"{pollutant}_avg"] = dataset["Concentration_correct"]
 
-        dataset[f"{pollutant}_SubIndex"] = round(dataset[f"{pollutant}_avg"].apply(lambda x: FUNCTION_MAP[pollutant](x)))
+        dataset[f"{pollutant}_SubIndex"] = round(
+            dataset[f"{pollutant}_avg"].apply(
+                lambda x: FUNCTION_MAP[pollutant](x)
+            )
+        )
 
         if dataset_merge.empty:
-            dataset_merge = dataset[["Countrycode", "AirQualityStationEoICode",
-                                     "Datetime", f"{pollutant}_avg",
-                                     f"{pollutant}_SubIndex"]].copy()
+            dataset_merge = dataset[
+                [
+                    "Countrycode",
+                    "AirQualityStationEoICode",
+                    "Datetime",
+                    f"{pollutant}_avg",
+                    f"{pollutant}_SubIndex",
+                ]
+            ].copy()
         else:
-            dataset_merge = pd.merge(dataset_merge,
-                                     dataset[["Countrycode", "AirQualityStationEoICode",
-                                              "Datetime", f"{pollutant}_avg",
-                                              f"{pollutant}_SubIndex"]],
-                                     how='left',
-                                     on=["Countrycode", "AirQualityStationEoICode", "Datetime"])
+            dataset_merge = pd.merge(
+                dataset_merge,
+                dataset[
+                    [
+                        "Countrycode",
+                        "AirQualityStationEoICode",
+                        "Datetime",
+                        f"{pollutant}_avg",
+                        f"{pollutant}_SubIndex",
+                    ]
+                ],
+                how="left",
+                on=["Countrycode", "AirQualityStationEoICode", "Datetime"],
+            )
 
-    dataset_merge["AQI"] = dataset_merge[[f"{p}_SubIndex" for p in config["pollutants"]]].max(axis=1, skipna=False)
+    dataset_merge["AQI"] = dataset_merge[
+        [f"{p}_SubIndex" for p in config["pollutants"]]
+    ].max(axis=1, skipna=False)
     dataset_merge.to_csv(output_path, index=False)
 
 
 if __name__ == "__main__":
     create_common_dataset()
-
