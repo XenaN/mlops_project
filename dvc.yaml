@@ -42,3 +42,10 @@ stages:
         - data/interim/updated/
       outs:
         - data/interim/cleaned/${country}_${item}_cleaned.csv
+
+  calculation_AQI:
+    cmd: python src/features/data_preprocessing.py data/interim/cleaned/ data/processed/AQI_dataset.csv
+    deps:
+      - data/interim/cleaned/
+    outs:
+      - data/processed/AQI_dataset.csv

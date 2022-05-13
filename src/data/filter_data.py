@@ -1,7 +1,6 @@
 import os
 import click
 import json
-import pathlib
 
 import pandas as pd
 
@@ -25,9 +24,7 @@ def filter_data(input_path: str, output_path: str):
 
     table_filtered = pd.DataFrame()
     for file in list_csv:
-        historical_data = pd.read_csv(
-            f"{input_path}{file}", index_col=False, encoding="latin1"
-        )
+        historical_data = pd.read_csv(f"{input_path}{file}", index_col=False)
 
         code = config["AirQualityStationEoICode"]
         assert len(historical_data["AirQualityStationEoICode"].unique()) == 1

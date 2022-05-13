@@ -1,0 +1,31 @@
+molar_mass:
+  CO: 28.01
+  NO2: 46.01
+  O3: 48.00
+  SO2: 64.06
+units:
+  CO: "ppm"       # mg/m3
+  O3: "ppm"       # µg/m3
+  NO2: "ppb"      # µg/m3
+  SO2: "ppb"      # µg/m3
+  PM10: "µg/m3"   # µg/m3
+  PM2.5: "µg/m3"  # µg/m3
+average:
+  CO:
+    window: 8
+    period: 1
+  O3:
+    window: 8
+    period: 1
+  NO2:
+    window: 1
+    period: 1
+  SO2:
+    window: 1
+    period: 1
+  PM10:
+    window: 24
+    period: 16
+  PM2.5:
+    window: 24
+    period: 16
