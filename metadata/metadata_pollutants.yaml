@@ -1,7 +1,7 @@
 molar_mass:
-  CO: 28.01,
-  NO2: 46.01,
-  O3: 48.00,
+  CO: 28.01
+  NO2: 46.01
+  O3: 48.00
   SO2: 64.06
 units:
   CO: "ppm"       # mg/m3

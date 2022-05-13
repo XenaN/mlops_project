@@ -1,12 +1,14 @@
+import click
+import json
 from typing import List, Dict
 
+import yaml
 import numpy as np
 import pandas as pd
-import yaml
 
-MOLAR_MASS_PATH = '../../metadata/metadata_pollutants.yaml'
-UPDATED_EEA_PATH = '../../data/interim/updated_data_eea/'
-PROCESSED_DATA_PATH = '../../data/processed/'
+
+METADATA_POLLUTANT_PATH = 'metadata/metadata_pollutants.yaml'
+CONFIG_PATH = "metadata/download_config.json"
 
 
 def change_units(df: pd.DataFrame, metadata: Dict, unit: str):
@@ -16,7 +18,8 @@ def change_units(df: pd.DataFrame, metadata: Dict, unit: str):
     :param metadata: molar mass info path
     :param unit: new unit
     """
-    assert df["UnitOfMeasurement"].unique() == ['mg/m3'] or df["UnitOfMeasurement"].unique() == ['µg/m3']
+    assert df["UnitOfMeasurement"].unique() == ['mg/m3'] or \
+           df["UnitOfMeasurement"].unique() == ['µg/m3']
     assert len(df["AirPollutant"].unique()) == 1
 
     # The number 24.45 in the equations above is the volume (liters)
@@ -27,7 +30,8 @@ def change_units(df: pd.DataFrame, metadata: Dict, unit: str):
     if df["UnitOfMeasurement"].unique() == ['µg/m3'] and unit == "ppm":
         k = 0.001
 
-    df["Concentration_correct"] = df["Concentration"] * coefficient * k / metadata[df["AirPollutant"].unique()[0]]
+    df["Concentration_correct"] = df["Concentration"] * coefficient * k / \
+                                  metadata[df["AirPollutant"].unique()[0]]
 
 
 def get_subindex(I_low: int, I_hi: int, c_low: float, c_hi: float, c: float):
@@ -192,49 +196,58 @@ FUNCTION_MAP = {
 }
 
 
-def create_common_dataset(pollutants: List, countries: List,
-                          mm_path: str, save_path: str):
+@click.command()
+@click.argument("input_path", type=click.Path(exists=True))
+@click.argument("output_path", type=click.Path())
+def create_common_dataset(input_path: str, output_path: str):
     """
-
+    Merge dataset with subindex and calculation AQI
+    :param input_path: path with input data
+    :param output_path: path to save file
     """
-    with open(mm_path) as file:
+    with open(METADATA_POLLUTANT_PATH) as file:
         metadata = yaml.safe_load(file)
 
-    for country in countries:
-        dataset_merge = pd.DataFrame({})
+    with open(CONFIG_PATH) as json_file:
+        config = json.load(json_file)
 
-        for pollutant in pollutants:
-            path = f"{UPDATED_EEA_PATH}{country}_{pollutant}/"
+    dataset_merge = pd.DataFrame({})
 
-            dataset = pd.read_csv(path)
+    for pollutant in config["pollutants"]:
+        path = f"{input_path}{config['country']}_{pollutant}_cleaned.csv"
+        dataset = pd.read_csv(path)
 
-            assert len(dataset["UnitOfMeasurement"].unique()) == 1
-            if metadata["units"][pollutant] != dataset["UnitOfMeasurement"].unique()[0]:
-                change_units(dataset, metadata["molar_mass"], metadata["units"][pollutant])
+        assert len(dataset["UnitOfMeasurement"].unique()) == 1
+        if metadata["units"][pollutant] != dataset["UnitOfMeasurement"].unique()[0]:
+            change_units(dataset, metadata["molar_mass"], metadata["units"][pollutant])
+        else:
+            dataset["Concentration_correct"] = dataset["Concentration"]
 
-            if metadata["average"][pollutant]["window"] > 1:
-                dataset[f"{pollutant}_avg"] = dataset["Concentration_correct"].rolling(
-                    window=metadata["average"][pollutant]["window"],
-                    min_periods=metadata["average"][pollutant]["period"]).mean().values
-            else:
-                dataset.rename(columns=({"Concentration": f"{pollutant}_avg"}))
+        if metadata["average"][pollutant]["window"] > 1:
+            dataset[f"{pollutant}_avg"] = dataset["Concentration_correct"].rolling(
+                window=metadata["average"][pollutant]["window"],
+                min_periods=metadata["average"][pollutant]["period"]).mean().values
+        else:
+            dataset[f"{pollutant}_avg"] = dataset["Concentration_correct"]
 
-            dataset[f"{pollutant}_SubIndex"] = round(dataset[f"{pollutant}_avg"].apply(lambda x:
-                                                                                       FUNCTION_MAP[pollutant](x)))
+        dataset[f"{pollutant}_SubIndex"] = round(dataset[f"{pollutant}_avg"].apply(lambda x: FUNCTION_MAP[pollutant](x)))
 
-            if dataset_merge.empty:
-                dataset_merge = dataset[["Countrycode", "SamplingPoint",
-                                         "DatetimeEnd", f"{pollutant}_avg",
-                                         f"{pollutant}_SubIndex"]].copy()
-            else:
-                dataset_merge = pd.merge(dataset_merge,
-                                         dataset[["Countrycode", "SamplingPoint",
-                                                  "DatetimeEnd", f"{pollutant}_avg",
-                                                  f"{pollutant}_SubIndex"]],
-                                         how='left',
-                                         on=["Countrycode", "SamplingPoint", "DatetimeEnd"])
+        if dataset_merge.empty:
+            dataset_merge = dataset[["Countrycode", "AirQualityStationEoICode",
+                                     "Datetime", f"{pollutant}_avg",
+                                     f"{pollutant}_SubIndex"]].copy()
+        else:
+            dataset_merge = pd.merge(dataset_merge,
+                                     dataset[["Countrycode", "AirQualityStationEoICode",
+                                              "Datetime", f"{pollutant}_avg",
+                                              f"{pollutant}_SubIndex"]],
+                                     how='left',
+                                     on=["Countrycode", "AirQualityStationEoICode", "Datetime"])
 
-        dataset_merge["AQI"] = dataset_merge[[f"{p}_SubIndex" for p in pollutants]].max(axis=1)
-        dataset_merge.to_csv(save_path, index=False)
+    dataset_merge["AQI"] = dataset_merge[[f"{p}_SubIndex" for p in config["pollutants"]]].max(axis=1, skipna=False)
+    dataset_merge.to_csv(output_path, index=False)
 
+
+if __name__ == "__main__":
+    create_common_dataset()
 

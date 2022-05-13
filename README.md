@@ -27,12 +27,13 @@ Merged dataframes are saved into *data/interim*.
 ### Repo structure:
 #### (cookiecutter style)
 - **data**
-   - **external**    - data from third party sources
+   - **external**    - up-to-date data from http://discomap.eea.europa.eu/
    - **interim**     - intermediate data that has been transformed
+     - **cleaned**   - cleaned data after merging
+     - **filtered**  - filtered data by station code
+     - **updated**   - merged data historical with current
    - **processed**   - the final, canonical data sets for modeling
-   - **raw**         - the original, immutable data dump
-     - **historical_data_eea** - historical data from http://discomap.eea.europa.eu/
-     - **updated_data_eea**    - up-to-date data from http://discomap.eea.europa.eu/
+   - **raw**         - historical data from http://discomap.eea.europa.eu/  
 - **metadata**   - meta information for scripts
 - **models**     - trained and serialized models, model predictions, or model summaries
 - **notebooks**  - jupyter notebooks
