@@ -1,6 +1,6 @@
 import click
 import json
-from typing import List, Dict
+from typing import Dict
 
 import yaml
 import numpy as np
