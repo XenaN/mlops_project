@@ -1,12 +1,10 @@
 import requests
 import json
-from datetime import date
 import pathlib
 
 
 SERVICE_URL = "http://discomap.eea.europa.eu/map/fme/latest"
-METADATA_PATH = "metadata/download_tags.json"
-UPDATED_EEA_PATH = "data/raw/updated_data_eea/"
+UPDATED_EEA_PATH = "data/external/"
 
 
 def download_updated_data_from_discomap(country: str, pollutant: str):
@@ -15,13 +13,7 @@ def download_updated_data_from_discomap(country: str, pollutant: str):
     :param country: tag of country
     :param pollutant: tag of pollutant
     """
-    with open(METADATA_PATH) as json_file:
-        metadata = json.load(json_file)
-
-    date_today = date.today().strftime("%Y%m%d")
-
-    file_name = f"{UPDATED_EEA_PATH}{country}_{metadata[pollutant]}_" \
-                f"{date_today}.csv"
+    file_name = f"{UPDATED_EEA_PATH}{country}_{pollutant}.csv"
     download_file = f"{SERVICE_URL}/{country}_{pollutant}.csv"
 
     status = requests.get(download_file).status_code

@@ -1,17 +1,12 @@
-import os
-import pathlib
 import json
+import pathlib
 import click
-from datetime import date
+import shutil
+from typing import List
 
 import pandas as pd
 
 
-INTERIM_UPDATED_EEA_PATH = "data/interim/updated_data_eea/"
-UPDATED_EEA_PATH = "../../data/raw/updated_data_eea/"
-RAW_HISTORICAL_EEA_PATH = "data/raw/historical_data_eea/"
-RAW_UPDATED_EEA_PATH = "data/raw/updated_data_eea/"
-METADATA_PATH = "metadata/download_tags.json"
 CONFIG_PATH = "metadata/download_config.json"
 
 COLUMNS = {
@@ -30,79 +25,63 @@ COLUMNS = {
 
 
 @click.command()
-@click.argument("pollutant", type=click.STRING)
-def merge_eea_data(pollutant: str):
+@click.argument("input_path", type=click.Path(), nargs=2)
+@click.argument("output_path", type=click.Path())
+def merge_eea_data(input_path: List[str], output_path: str):
     """
     This function concatenates historical and last updated datasets
-    :param pollutant: tag of pollutant
+    :param input_path: list of path with input data
+    :param output_path: path to save file
     """
-    pathlib.Path(UPDATED_EEA_PATH).mkdir(parents=True, exist_ok=True)
-    date_today = date.today().strftime("%Y%m%d")
-    with open(METADATA_PATH) as json_file:
-        metadata = json.load(json_file)
+    file = pathlib.Path(output_path)
+    if file.is_file():
+        path = output_path
+    else:
+        path = input_path[0]
+
+    input_file = pathlib.Path(input_path[1])
+    if input_file.is_file():
+        updated_data = pd.read_csv(input_path[1],
+                                   index_col=False,
+                                   encoding="latin1").rename(
+            COLUMNS, axis="columns"
+        )
+    else:
+        shutil.copyfile(input_path[0], output_path)
+        return
+
+    historical_data = pd.read_csv(path, index_col=False, encoding="latin1")
+
+    assert len(historical_data["AirQualityStationEoICode"].unique()) == 1
+    assert len(historical_data["UnitOfMeasurement"].unique()) == 1
 
     with open(CONFIG_PATH) as json_file:
         config = json.load(json_file)
+    code = config["AirQualityStationEoICode"]
 
-    file_name = f"{RAW_UPDATED_EEA_PATH}{config['country']}_" \
-                f"{metadata[pollutant]}_{date_today}.csv"
+    updated_data["UnitOfMeasurement"] = historical_data[
+        "UnitOfMeasurement"
+    ].unique()[0]
 
-    if len(os.listdir(RAW_UPDATED_EEA_PATH)) == 0:
-        print(f"{file_name} does not exist")
-        return
-
-    pathlib.Path(INTERIM_UPDATED_EEA_PATH).mkdir(parents=True, exist_ok=True)
-    if len(os.listdir(INTERIM_UPDATED_EEA_PATH)) == 0:
-        path = f"{RAW_HISTORICAL_EEA_PATH}{config['country']}_{pollutant}/"
-    else:
-        path = INTERIM_UPDATED_EEA_PATH
-
-    list_csv = os.listdir(path)
-    updated_data = pd.read_csv(file_name,
-                               index_col=False,
-                               encoding="latin1").rename(
-        COLUMNS, axis="columns"
+    data_new = pd.concat(
+        [
+            historical_data,
+            updated_data.query("AirQualityStationEoICode == @code")
+        ],
+        axis=0,
+        join="inner",
     )
 
-    for file in list_csv:
-        historical_data = pd.read_csv(
-            f"{path}{file}", index_col=False, encoding="latin1"
-        )
+    data_new["DatetimeBegin"] = data_new["DatetimeBegin"].apply(
+        lambda x: x.replace(" +", "+")
+    )
+    data_new["DatetimeEnd"] = data_new["DatetimeEnd"].apply(
+        lambda x: x.replace(" +", "+")
+    )
+    data_new["Datetime"] = pd.to_datetime(data_new["DatetimeEnd"])
+    data_new = data_new.drop_duplicates().sort_values("Datetime")
 
-        code = config["AirQualityStationEoICode"]
-        assert len(historical_data["AirQualityStationEoICode"].unique()) == 1
-        assert len(historical_data["UnitOfMeasurement"].unique()) == 1
-
-        updated_data["UnitOfMeasurement"] = historical_data[
-            "UnitOfMeasurement"
-        ].unique()[0]
-
-        if historical_data["AirQualityStationEoICode"].unique()[0] == code:
-
-            data_new = pd.concat(
-                [
-                    historical_data,
-                    updated_data.query(
-                        "AirQualityStationEoICode == @code")
-                ],
-                axis=0,
-                join="inner",
-            )
-
-            data_new["DatetimeBegin"] = data_new["DatetimeBegin"].apply(
-                lambda x: x.replace(" +", "+")
-            )
-            data_new["DatetimeEnd"] = data_new["DatetimeEnd"].apply(
-                lambda x: x.replace(" +", "+")
-            )
-            data_new["Datetime"] = pd.to_datetime(data_new["DatetimeEnd"])
-            data_new = data_new.drop_duplicates().sort_values("Datetime")
-
-            data_new.to_csv(
-                f"{INTERIM_UPDATED_EEA_PATH}{config['country']}_"
-                f"{pollutant}_historical_updated.csv",
-                index=False,
-            )
+    data_new.to_csv(output_path, index=False)
 
 
 if __name__ == "__main__":

@@ -10,16 +10,18 @@ import pandas as pd
 
 
 SERVICE_URL = "http://discomap.eea.europa.eu/map/fme/latest"
-HISTORICAL_EEA_PATH = "data/raw/historical_data_eea/"
+HISTORICAL_EEA_PATH = "data/raw/"
 TAGS_PATH = "metadata/download_tags.json"
 METADATA_PATH = "metadata/download_config.json"
 
 
 def download_urls_historical_data_from_discomap(
-    country: str, pollutant: str, year_start: int, year_end: int
+        input_path: str, country: str,
+        pollutant: str, year_start: int, year_end: int
 ):
     """
     Save urls with historical data from discomap.eea.europa.eu
+    :param input_path: list of path with input data
     :param country: tag of country
     :param pollutant: tag of pollutant
     :param year_start: Year_from parameter
@@ -29,7 +31,7 @@ def download_urls_historical_data_from_discomap(
         metadata = json.load(json_file)
 
     with open(
-        f"{HISTORICAL_EEA_PATH}{country}_{pollutant}_urls.txt", "wb"
+        f"{input_path}{country}_{pollutant}_urls.txt", "wb"
     ) as urls_file:
 
         download_file = (
@@ -66,11 +68,15 @@ def save_csv_from_url(pair_path_and_url: Tuple):
 
 
 @click.command()
+@click.argument("input_path", type=click.Path())
 @click.argument("pollutant", type=click.STRING)
 @click.argument("n_cores", type=click.INT)
-def download_historical_data_from_discomap_urls(pollutant: str, n_cores: int):
+def download_historical_data_from_discomap_urls(
+        input_path: str,
+        pollutant: str, n_cores: int):
     """
     Save historical data from discomap.eea.europa.eu urls
+    :param input_path: list of path with input data
     :param pollutant: tag of pollutant
     :param n_cores: number of cores
     """
@@ -78,6 +84,7 @@ def download_historical_data_from_discomap_urls(pollutant: str, n_cores: int):
         metadata = json.load(json_file)
 
     download_urls_historical_data_from_discomap(
+        input_path,
         metadata["country"],
         pollutant,
         metadata["year_start"],
@@ -85,13 +92,13 @@ def download_historical_data_from_discomap_urls(pollutant: str, n_cores: int):
     )
 
     with open(
-        f'{HISTORICAL_EEA_PATH}{metadata["country"]}_{pollutant}_urls.txt',
+        f'{input_path}{metadata["country"]}_{pollutant}_urls.txt',
         "r",
         encoding="utf-8-sig",
     ) as file:
         urls = file.read().splitlines()
 
-    country_pollutant_path = f"{HISTORICAL_EEA_PATH}/{metadata['country']}_" \
+    country_pollutant_path = f"{input_path}/{metadata['country']}_" \
                              f"{pollutant}/"
     pathlib.Path(country_pollutant_path).mkdir(parents=True, exist_ok=True)
 
