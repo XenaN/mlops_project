@@ -30,8 +30,8 @@
           if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
           run: poetry install --no-interaction --no-root
 
-#        - name: Run Black
-#          run: poetry run black --line-length 79 --check $(git ls-files '*.py')
+        - name: Run Black
+          run: poetry run black --line-length 79 --check $(git ls-files '*.py')
 
         - name: Linter
-          run: poetry run flake8 $(git ls-files '*.py')
+          run: poetry run flake8 --ignore F841,W503 $(git ls-files '*.py')
