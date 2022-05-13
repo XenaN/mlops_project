@@ -7,44 +7,31 @@
         - main
 
   jobs:
-    build_a:
+    build_one:
       runs-on: ubuntu-latest
       steps:
+        - name: Install Python 3.9
+          uses: actions/setup-python@v2
+          with:
+            python-version: 3.9
+
+        - name: Install Poetry
+          uses: snok/install-poetry@v1
+
         - uses: actions/checkout@v3
         - name: Cache dependencies
+          id: cached-poetry-dependencies
           uses: actions/cache@v3
-          id: cache-venv
           with:
-            path: |
-              venv/
-              .cache/pip
-            key: ${{ runner.os }}-venv-${{ hashFiles('**/requirements*.txt') }}
-            restore-keys: |
-              ${{ runner.os }}-venv-
-        - name: Create venv and install requirements
-          if: steps.cache.outputs.cache-hit != 'true'
-          run: |
-            echo "Installing dependencies and caching them."
-            python --version
-            pwd
-            python -m venv ./temp_venv
-            source ./temp_venv/bin/activate
-            pip install -r requirements.txt
+            path: .venv
+            key: venv-${{ runner.os }}-mycache-v1-${{ hashFiles('**/poetry.lock') }}
 
-    type_test:
-      runs-on: ubuntu-latest
-      needs: [build_a]
-      steps:
-        - run: echo "This job will run after build_a have finished"
+        - name: Install dependencies
+          if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+          run: poetry install --no-interaction --no-root
 
-    test_b:
-      runs-on: ubuntu-latest
-      needs: [build_a]
-      steps:
-        - run: echo "This job will run after build_a have finished, it is parallel test_a"
+        - name: Run Black
+          run: poetry run black --line-length 79 --check $(git ls-files '*.py')
 
-    deploy_ab:
-      runs-on: ubuntu-latest
-      needs: [type_test, test_b]
-      steps:
-        - run: echo "This job will run after test_a and test_ab is complete"
+        - name: Linter
+          run: poetry run flake8 $(git ls-files '*.py')

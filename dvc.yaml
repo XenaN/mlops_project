@@ -1,0 +1,44 @@
+vars:
+  - metadata/download_config.json
+
+stages:
+
+  load_historical_data:
+    foreach: ${pollutants}
+    do:
+      cmd: python src/data/data_loading_historical.py data/raw/ ${item} 8
+      deps:
+        - metadata/download_config.json
+        - src/data/data_loading_historical.py
+      outs:
+        - data/raw/${country}_${item}
+        - data/raw/${country}_${item}_urls.txt
+
+  filter_data:
+    foreach: ${pollutants}
+    do:
+      cmd: python src/data/filter_data.py data/raw/${country}_${item}/ data/interim/filtered/${country}_${item}_filtered.csv
+      deps:
+        - data/raw/
+      outs:
+        - data/interim/filtered/${country}_${item}_filtered.csv
+
+  merge_data:
+    foreach: ${pollutants}
+    do:
+      cmd: python src/data/data_raw_merge.py data/interim/filtered/${country}_${item}_filtered.csv data/external/${country}_${item}.csv data/interim/updated/${country}_${item}_updated.csv
+      deps:
+        - data/interim/filtered
+        - data/external/
+        - src/data/data_raw_merge.py
+      outs:
+        - data/interim/updated/${country}_${item}_updated.csv
+
+  clean_data:
+    foreach: ${pollutants}
+    do:
+      cmd: python src/data/clean_data.py data/interim/updated/${country}_${item}_updated.csv data/interim/cleaned/${country}_${item}_cleaned.csv
+      deps:
+        - data/interim/updated/
+      outs:
+        - data/interim/cleaned/${country}_${item}_cleaned.csv

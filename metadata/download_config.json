@@ -1,6 +1,6 @@
 {
-  "countries":
-          ["DE", "ES"],
+  "country": "ES",
+  "AirQualityStationEoICode": "ES1563A",
   "pollutants":
           ["CO", "PM10", "NO2", "SO2", "O3", "PM2.5"],
   "year_start": 2021,

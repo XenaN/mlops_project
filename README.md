@@ -1,10 +1,27 @@
 # MLops project
 
 ### How to use:
-1. Istall all libraries
+1. After creation venv istall all libraries
 ```commandline
-pip install -r requirements.txt
+poetry install
 ```
+2. If not conda than run
+```commandline
+poetry shell
+```
+3. Run pipeline
+```commandline
+dvc repro
+```
+For one stage
+```dvc repro <stage name>```
+When you run pipeline for the first time there are no updated data, so merge will be passed.
+4. To load updated data run script *data_loading_updated.py* by terminal command
+```python data_loading_updated.py```
+or via IDE.
+If you run two functions in one day then updated data will be the same historical data.
+All data is saved in *data/raw*.
+Merged dataframes are saved into *data/interim*.
 
 
 ### Repo structure:
@@ -25,6 +42,3 @@ pip install -r requirements.txt
   - **features** - scripts to turn raw data into features for modeling
   - **models**   - scripts to train models and then use trained models to make predictions
   - **visualisation** - scripts to create exploratory and results oriented visualizations
-
-
-Authors: XenaN, Yaromir-hmel, inbfor
