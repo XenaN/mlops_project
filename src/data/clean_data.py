@@ -15,8 +15,11 @@ def clean_data(input_path: str, output_path: str):
     table = pd.read_csv(
         input_path, parse_dates=["Datetime"], index_col=["Datetime"]
     )
-
+    if table["Countrycode"].unique() == ["LV"] and \
+            table["AirPollutant"].unique() == ["CO"]:
+        table["UnitOfMeasurement"] = "mg/m3"
     assert len(table["UnitOfMeasurement"].unique()) == 1
+
     if table["DatetimeEnd"].duplicated().any():
         index = table[table["DatetimeEnd"].duplicated(keep=False)].index
         index_validity = table.loc[index].query("Validity == -1").index
@@ -26,15 +29,11 @@ def clean_data(input_path: str, output_path: str):
     if not table.query("Validity == -1")["Concentration"].isnull().all():
         table.query("Validity == -1")["Concentration"] = None
 
-    if (
-        len(pd.to_datetime(table["DatetimeEnd"]).diff().value_counts().values)
-        != 1
-    ):
-        mask = table.index
+    mask = table.index
 
-        table = table.resample("H").ffill()
-        diff = table.index.difference(mask)
-        table.loc[diff, "Concentration"] = None
+    table = table.resample("H").ffill()
+    diff = table.index.difference(mask)
+    table.loc[diff, "Concentration"] = None
 
     table = table.reset_index(level=0)
 

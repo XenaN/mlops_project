@@ -20,6 +20,7 @@ stages:
       cmd: python src/data/filter_data.py data/raw/${country}_${item}/ data/interim/filtered/${country}_${item}_filtered.csv
       deps:
         - data/raw/
+        - src/data/filter_data.py
       outs:
         - data/interim/filtered/${country}_${item}_filtered.csv
 
@@ -40,6 +41,7 @@ stages:
       cmd: python src/data/clean_data.py data/interim/updated/${country}_${item}_updated.csv data/interim/cleaned/${country}_${item}_cleaned.csv
       deps:
         - data/interim/updated/
+        - src/data/clean_data.py
       outs:
         - data/interim/cleaned/${country}_${item}_cleaned.csv
 
@@ -47,5 +49,6 @@ stages:
     cmd: python src/features/data_preprocessing.py data/interim/cleaned/ data/processed/AQI_dataset.csv
     deps:
       - data/interim/cleaned/
+      - src/features/data_preprocessing.py
     outs:
       - data/processed/AQI_dataset.csv
