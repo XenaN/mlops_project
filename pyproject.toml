@@ -14,6 +14,8 @@ flake8 = "^4.0.1"
 jupyterlab = "^3.4.2"
 matplotlib = "^3.5.2"
 seaborn = "^0.11.2"
+xgboost = "^1.6.1"
+sklearn = "^0.0"
 
 [tool.poetry.dev-dependencies]
 
