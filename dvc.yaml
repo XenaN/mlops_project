@@ -48,6 +48,7 @@ stages:
   calculation_AQI:
     cmd: python src/features/data_preprocessing.py data/interim/cleaned/ data/processed/AQI_dataset.csv
     deps:
+      - metadata/metadata_pollutants.yaml
       - data/interim/cleaned/
       - src/features/data_preprocessing.py
     outs:

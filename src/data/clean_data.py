@@ -15,8 +15,9 @@ def clean_data(input_path: str, output_path: str):
     table = pd.read_csv(
         input_path, parse_dates=["Datetime"], index_col=["Datetime"]
     )
-    if table["Countrycode"].unique() == ["LV"] and \
-            table["AirPollutant"].unique() == ["CO"]:
+    if table["Countrycode"].unique() == ["LV"] and table[
+        "AirPollutant"
+    ].unique() == ["CO"]:
         table["UnitOfMeasurement"] = "mg/m3"
     assert len(table["UnitOfMeasurement"].unique()) == 1
 
