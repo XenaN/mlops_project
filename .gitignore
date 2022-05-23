@@ -130,3 +130,9 @@ dmypy.json
 
 #ide
 .idea/
+
+#docker
+docker-compose.yaml
+
+#mlflow
+/mlruns

@@ -52,3 +52,29 @@ stages:
       - src/features/data_preprocessing.py
     outs:
       - data/processed/AQI_dataset.csv
+
+  prepare_dataset:
+    cmd: python src/models/prepare_datasets.py 1 data/processed/AQI_dataset.csv data/processed/train.csv data/processed/test.csv
+    deps:
+      - data/processed/AQI_dataset.csv
+      - src/models/prepare_datasets.py
+    outs:
+      - data/processed/train.csv
+      - data/processed/test.csv
+
+  train:
+    cmd: python src/models/train.py  data/processed/train.csv data/processed/test.csv models/model.clf
+    deps:
+      - data/processed/train.csv
+      - data/processed/test.csv
+      - src/models/train.py
+    outs:
+      - models/model.clf
+
+  evaluate:
+    cmd: python src/models/evaluate.py  data/processed/test.csv models/model.clf reports/scores.json
+    deps:
+      - models/model.clf
+      - src/models/evaluate.py
+    metrics:
+      - reports/scores.json

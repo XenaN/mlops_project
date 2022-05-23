@@ -3,6 +3,6 @@
   "AirQualityStationEoICode": "ES1563A",
   "pollutants":
           ["CO", "PM10", "NO2", "SO2", "O3", "PM2.5"],
-  "year_start": 2021,
+  "year_start": 2020,
   "year_end": 2022
 }
