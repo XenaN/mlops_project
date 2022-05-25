@@ -3,7 +3,7 @@ import os
 import mlflow
 import pandas as pd
 from dotenv import load_dotenv
-import unicorn
+import uvicorn
 from fastapi import FastAPI, File, UploadFile, HTTPException
 
 
@@ -38,6 +38,12 @@ class Model:
         return predictions
 
 
+# Check if environment variables for AWS access are available
+# If not, exit the program
+if os.getenv("AWS_ACCESS_KEY_ID") is None or \
+        os.getenv("AWS_SECRET_ACCESS_KEY") is None:
+    exit(1)
+
 # Create model
 model = Model(model_name="forest_model",
               model_stage="Staging")
@@ -62,11 +68,4 @@ async def create_upload_file(file: UploadFile = File(...)):
 
     else:
         raise HTTPException(status_code=400, detail="Invalid file format")
-
-
-# Check if environment variables for AWS access are available
-# If not, exit the programm
-if os.getenv("AWS_ACCESS_KET_ID") is None or \
-        os.getenv("AWS_SECRET_ACCESS_KEY") is None:
-    exit(1)
 

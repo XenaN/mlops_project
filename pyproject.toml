@@ -20,6 +20,8 @@ statsmodels = "^0.13.2"
 python-dotenv = "^0.20.0"
 unicorn = "^1.0.3"
 fastapi = "^0.78.0"
+uvicorn = "^0.17.6"
+python-multipart = "^0.0.5"
 
 [tool.poetry.dev-dependencies]
 

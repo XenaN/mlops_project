@@ -132,7 +132,7 @@ dmypy.json
 .idea/
 
 #docker
-docker-compose.yaml
+/docker/minio
 
 #mlflow
 /mlruns

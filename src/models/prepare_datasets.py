@@ -5,6 +5,7 @@ import pandas as pd
 
 
 @click.command()
+@click.argument("n_days", type=click.INT)
 @click.argument("input_path", type=click.Path(exists=True))
 @click.argument("output_path", type=click.Path(), nargs=2)
 def prepare_dataset(n_days: int, input_path: str, output_path: List[str]):
