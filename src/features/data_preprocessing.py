@@ -210,7 +210,7 @@ def create_common_dataset(input_path: str, output_path: str):
     :param input_path: path with input data
     :param output_path: path to save file
     """
-    with open(METADATA_POLLUTANT_PATH) as file:
+    with open(METADATA_POLLUTANT_PATH, encoding="utf8") as file:
         metadata = yaml.safe_load(file)
 
     with open(CONFIG_PATH) as json_file:
@@ -223,6 +223,10 @@ def create_common_dataset(input_path: str, output_path: str):
         dataset = pd.read_csv(path)
 
         assert len(dataset["UnitOfMeasurement"].unique()) == 1
+        print(
+            dataset["UnitOfMeasurement"].unique()[0],
+            metadata["units"][pollutant],
+        )
         if (
             metadata["units"][pollutant]
             != dataset["UnitOfMeasurement"].unique()[0]

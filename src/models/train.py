@@ -36,9 +36,9 @@ def train(input_path: List[str], output_path: str):
         test_y = test_df["AQI_t+1"].values
 
         params = {'n_estimators': 800,
-                  'min_samples_split': 2,
-                  'min_samples_leaf': 8,
-                  'max_depth': 52,
+                  'min_samples_split': 3,
+                  'min_samples_leaf': 5,
+                  'max_depth': 65,
                   'bootstrap': True}
 
         mlflow.log_params(params)
