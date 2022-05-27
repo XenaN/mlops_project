@@ -25,7 +25,7 @@ average:
     period: 1
   PM10:
     window: 24
-    period: 16
+    period: 1
   PM2.5:
     window: 24
-    period: 16
+    period: 1

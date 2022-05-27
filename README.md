@@ -1,5 +1,27 @@
 # MLops project
 
+**This is study project for learning some ML technic elemets.**
+
+### About project
+There are many pollutants in the air that worsen the quality of life of people. We can monitor some of them or all. In this case, we choose to use Air Quality Index instead of several pollutants. If you want you can read the article from references to understand which diseases are connected with one or another pollutant.
+
+Some points which you should know:
+For calculation AQI we use ozone, SO2, NO2, CO, and PM10, PM2.5. The last ones are airborne particulate matter (PM). Those with a diameter of 10 microns or less (PM10) are inhalable into the lungs and can induce adverse health effects. Fine particulate matter is defined as particles that are 2.5 microns or less in diameter (PM2.5). Therefore, PM2.5 comprises a portion of PM10.
+
+### Structure
+
+So what do we do? We use api from discomap.eea.europa.eu to get some historical data, and also to get up-to-date data to forecast AQI. 
+In metadata are saved configurations, where there are country, station, pollutant, and period for getting requests from api. 
+
+DVC run pipeline with 
+- loading historical data
+- filtering by station
+- merging with new data if needed
+- cleaning data
+- calculation AQI
+- train model
+- evaluate
+
 ### How to use:
 1. After creation venv istall all libraries
 ```commandline
