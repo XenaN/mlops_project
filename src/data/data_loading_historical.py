@@ -35,9 +35,7 @@ def download_urls_historical_data_from_discomap(
     with open(TAGS_PATH) as json_file:
         metadata = json.load(json_file)
 
-    with open(
-        f"{input_path}{country}_{pollutant}_urls.txt", "wb"
-    ) as urls_file:
+    with open(f"{input_path}{country}_{pollutant}_urls.txt", "wb") as urls_file:
 
         download_file = (
             f"https://fme.discomap.eea.europa.eu/fmedatastreaming/"
@@ -107,9 +105,7 @@ def download_historical_data_from_discomap_urls(
     ) as file:
         urls = file.read().splitlines()
 
-    country_pollutant_path = (
-        f"{input_path}/{metadata['country']}_" f"{pollutant}/"
-    )
+    country_pollutant_path = f"{input_path}/{metadata['country']}_" f"{pollutant}/"
     pathlib.Path(country_pollutant_path).mkdir(parents=True, exist_ok=True)
 
     with Pool(processes=n_cores) as pool:

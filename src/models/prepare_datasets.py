@@ -16,15 +16,12 @@ def prepare_dataset(n_days: int, input_path: str, output_path: List[str]):
     :param output_path:
     :return:
     """
-    df = pd.read_csv(input_path,
-                     parse_dates=['Datetime'],
-                     index_col=['Datetime'])
+    df = pd.read_csv(input_path, parse_dates=["Datetime"], index_col=["Datetime"])
 
-    df_daily = df.resample('D').mean().interpolate()
+    df_daily = df.resample("D").mean().interpolate()
 
-    df_shifted = pd.concat([df_daily["AQI"].shift(1), df_daily["AQI"]],
-                           axis=1).dropna()
-    df_shifted.columns = ['AQI', 'AQI_t+1']
+    df_shifted = pd.concat([df_daily["AQI"].shift(1), df_daily["AQI"]], axis=1).dropna()
+    df_shifted.columns = ["AQI", "AQI_t+1"]
 
     train, test = df_shifted.iloc[:-1], df_shifted.tail(n_days)
 

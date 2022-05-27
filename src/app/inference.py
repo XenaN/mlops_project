@@ -24,9 +24,7 @@ class Model:
         :param model_stage: stage of model version
         """
         # Load the model from Registry
-        self.model = mlflow.pyfunc.load_model(
-            f"models:/{model_name}/{model_stage}"
-        )
+        self.model = mlflow.pyfunc.load_model(f"models:/{model_name}/{model_stage}")
 
     def predict(self, data):
         """
@@ -40,10 +38,7 @@ class Model:
 
 # Check if environment variables for AWS access are available
 # If not, exit the program
-if (
-    os.getenv("AWS_ACCESS_KEY_ID") is None
-    or os.getenv("AWS_SECRET_ACCESS_KEY") is None
-):
+if os.getenv("AWS_ACCESS_KEY_ID") is None or os.getenv("AWS_SECRET_ACCESS_KEY") is None:
     print("None")
     exit(1)
 

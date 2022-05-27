@@ -58,9 +58,7 @@ def merge_eea_data(input_path: List[str], output_path: str):
         config = json.load(json_file)
     code = config["AirQualityStationEoICode"]
 
-    updated_data["UnitOfMeasurement"] = historical_data[
-        "UnitOfMeasurement"
-    ].unique()[0]
+    updated_data["UnitOfMeasurement"] = historical_data["UnitOfMeasurement"].unique()[0]
 
     data_new = pd.concat(
         [

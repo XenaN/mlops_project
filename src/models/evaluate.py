@@ -27,10 +27,9 @@ def evaluate(input_path: List[str], output_path: str):
 
     score = dict(rmse=mean_squared_error(test_y, y_predicted, squared=False))
 
-    with open(output_path, 'w') as f:
+    with open(output_path, "w") as f:
         json.dump(score, f)
 
 
 if __name__ == "__main__":
     evaluate()
-
