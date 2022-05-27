@@ -12,12 +12,10 @@ def clean_data(input_path: str, output_path: str):
     :param input_path: path with input data
     :param output_path: path to save file
     """
-    table = pd.read_csv(
-        input_path, parse_dates=["Datetime"], index_col=["Datetime"]
-    )
-    if table["Countrycode"].unique() == ["LV"] and table[
-        "AirPollutant"
-    ].unique() == ["CO"]:
+    table = pd.read_csv(input_path, parse_dates=["Datetime"], index_col=["Datetime"])
+    if table["Countrycode"].unique() == ["LV"] and table["AirPollutant"].unique() == [
+        "CO"
+    ]:
         table["UnitOfMeasurement"] = "mg/m3"
     assert len(table["UnitOfMeasurement"].unique()) == 1
 

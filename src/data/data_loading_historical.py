@@ -5,6 +5,8 @@ from typing import Tuple
 from multiprocessing import Pool
 from itertools import product
 import pathlib
+from urllib.error import URLError
+import time
 
 import pandas as pd
 
@@ -33,9 +35,7 @@ def download_urls_historical_data_from_discomap(
     with open(TAGS_PATH) as json_file:
         metadata = json.load(json_file)
 
-    with open(
-        f"{input_path}{country}_{pollutant}_urls.txt", "wb"
-    ) as urls_file:
+    with open(f"{input_path}{country}_{pollutant}_urls.txt", "wb") as urls_file:
 
         download_file = (
             f"https://fme.discomap.eea.europa.eu/fmedatastreaming/"
@@ -60,14 +60,18 @@ def save_csv_from_url(pair_path_and_url: Tuple):
     Pandas reads and saves dataframe from url
     :param pair_path_and_url: 0 - path to save data and 1 - url for dataset
     """
-    try:
-        dataset = pd.read_csv(pair_path_and_url[1], index_col=False)
-        dataset.to_csv(
-            f"{pair_path_and_url[0]}{pair_path_and_url[1].split('/')[-1]}",
-            index=False,
-        )
-    except Exception:
-        print(f"Save csv file fail {pair_path_and_url[1]}")
+    delay = 5
+    max_retries = 3
+    for _ in range(max_retries):
+        try:
+            dataset = pd.read_csv(pair_path_and_url[1], index_col=False)
+            dataset.to_csv(
+                f"{pair_path_and_url[0]}{pair_path_and_url[1].split('/')[-1]}",
+                index=False,
+            )
+        except URLError:
+            time.sleep(delay)
+            delay *= 2
 
 
 @click.command()
@@ -101,9 +105,7 @@ def download_historical_data_from_discomap_urls(
     ) as file:
         urls = file.read().splitlines()
 
-    country_pollutant_path = (
-        f"{input_path}/{metadata['country']}_" f"{pollutant}/"
-    )
+    country_pollutant_path = f"{input_path}/{metadata['country']}_" f"{pollutant}/"
     pathlib.Path(country_pollutant_path).mkdir(parents=True, exist_ok=True)
 
     with Pool(processes=n_cores) as pool:

@@ -32,10 +32,7 @@ def change_units(df: pd.DataFrame, metadata: Dict, unit: str):
         k = 0.001
 
     df["Concentration_correct"] = (
-        df["Concentration"]
-        * coefficient
-        * k
-        / metadata[df["AirPollutant"].unique()[0]]
+        df["Concentration"] * coefficient * k / metadata[df["AirPollutant"].unique()[0]]
     )
 
 
@@ -210,7 +207,7 @@ def create_common_dataset(input_path: str, output_path: str):
     :param input_path: path with input data
     :param output_path: path to save file
     """
-    with open(METADATA_POLLUTANT_PATH) as file:
+    with open(METADATA_POLLUTANT_PATH, encoding="utf8") as file:
         metadata = yaml.safe_load(file)
 
     with open(CONFIG_PATH) as json_file:
@@ -223,13 +220,12 @@ def create_common_dataset(input_path: str, output_path: str):
         dataset = pd.read_csv(path)
 
         assert len(dataset["UnitOfMeasurement"].unique()) == 1
-        if (
-            metadata["units"][pollutant]
-            != dataset["UnitOfMeasurement"].unique()[0]
-        ):
-            change_units(
-                dataset, metadata["molar_mass"], metadata["units"][pollutant]
-            )
+        print(
+            dataset["UnitOfMeasurement"].unique()[0],
+            metadata["units"][pollutant],
+        )
+        if metadata["units"][pollutant] != dataset["UnitOfMeasurement"].unique()[0]:
+            change_units(dataset, metadata["molar_mass"], metadata["units"][pollutant])
         else:
             dataset["Concentration_correct"] = dataset["Concentration"]
 
@@ -247,9 +243,7 @@ def create_common_dataset(input_path: str, output_path: str):
             dataset[f"{pollutant}_avg"] = dataset["Concentration_correct"]
 
         dataset[f"{pollutant}_SubIndex"] = round(
-            dataset[f"{pollutant}_avg"].apply(
-                lambda x: FUNCTION_MAP[pollutant](x)
-            )
+            dataset[f"{pollutant}_avg"].apply(lambda x: FUNCTION_MAP[pollutant](x))
         )
 
         if dataset_merge.empty:
