@@ -39,7 +39,7 @@
         - name: Linter
           run: poetry run flake8 --max-line-length 88 --ignore F841,W503,F401 $(git ls-files '*.py')
 
-        - name: Pytets
+        - name: Pytest
           run: |
             poetry run dvc pull
             poetry run dvc repro
