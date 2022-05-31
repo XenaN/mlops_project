@@ -39,7 +39,7 @@
         - name: Linter
           uses: py-actions/flake8@v2
           with:
-            ignore: "F401", "W503", "F841"
+            ignore: "F401"
             max-line-length: "88"
             path: "src"
 
