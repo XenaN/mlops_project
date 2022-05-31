@@ -8,7 +8,7 @@
 
   jobs:
     build_one:
-      runs-on: self-hosted
+      runs-on: ubuntu-latest
       steps:
         - name: Install Python 3.9
           uses: actions/setup-python@v2
@@ -42,5 +42,4 @@
         - name: Pytest
           run: |
             poetry run dvc pull
-            poetry run dvc repro
             poetry run pytest --disable-warnings
