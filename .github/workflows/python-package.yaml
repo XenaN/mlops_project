@@ -36,8 +36,8 @@
         - name: Run Black
           run: poetry run black --line-length 88 --check .
 
-        - name: Linter
-          run: poetry run flake8 --max-line-length 88 --ignore F401,F841,W503 .
+#        - name: Linter
+#          run: poetry run flake8 --max-line-length 88 --ignore F401,F841,W503 .
 
         - name: Pytest
           run: |
