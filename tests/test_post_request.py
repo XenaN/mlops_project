@@ -1,6 +1,6 @@
 import requests
 
-TEST_FILE = "data/test_x.csv"
+TEST_FILE = "tests/data/test_x.csv"
 
 
 def test_create_request():
