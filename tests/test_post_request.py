@@ -5,7 +5,7 @@ TEST_FILE = "tests/data/test_x.csv"
 
 def test_create_request():
     files = {"file": open(TEST_FILE, "rb")}
-    url = "http://192.168.0.157:8003/invocation"
+    url = "http://192.168.0.176:8003/invocation"
     resp = requests.post(url=url, files=files)
     result = resp.json()
 
