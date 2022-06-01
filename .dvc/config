@@ -1,6 +1,7 @@
 [core]
     remote = remote
     autostage = false
+    no_scm = true
 ['remote "remote"']
     url = s3://mlops-bucket-xena
     endpointurl = https://storage.yandexcloud.net
