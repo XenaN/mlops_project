@@ -1,5 +1,3 @@
-from fastapi.testclient import TestClient
-from src.app.inference import app
 import requests
 
 TEST_FILE = "data/test_x.csv"
