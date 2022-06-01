@@ -13,7 +13,7 @@ def test_create_request():
         files=files,
     )
 
-    url = "http://127.0.0.1:8003/invocation"
+    url = "http://192.168.0.157:8003/invocation"
     resp = requests.post(url=url, files=files)
 
     assert response.status_code == 200
