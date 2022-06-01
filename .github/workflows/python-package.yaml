@@ -8,7 +8,7 @@
 
   jobs:
     build_one:
-      runs-on: self-hosted
+      runs-on: ubuntu-latest
       steps:
         - name: Install Python 3.9
           uses: actions/setup-python@v2
@@ -26,7 +26,7 @@
           id: cached-poetry-dependencies
           uses: actions/cache@v3
           with:
-            path: .venv
+            path: ~/.cache/pypoetry/virtualnenvs
             key: venv-${{ runner.os }}-mycache-v1-${{ hashFiles('**/poetry.lock') }}
 
         - name: Install dependencies
@@ -36,8 +36,8 @@
         - name: Run Black
           run: poetry run black --line-length 88 --check .
 
-#        - name: Linter
-#          run: poetry run flake8 --max-line-length 88 --ignore F401,F841,W503 .
+        - name: Linter
+          run: poetry run flake8 --max-line-length 88 --ignore F401,F841,W503 .
 
         - name: Pytest
           run: |
