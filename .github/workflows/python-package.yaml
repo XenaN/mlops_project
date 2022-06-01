@@ -37,10 +37,8 @@
           run: poetry run black --line-length 88 --check .
 
         - name: Linter
-          uses: py-actions/flake8@v2
-          with:
-            ignore: "F401, F841, W503"
-            max-line-length: "88"
+          run: poetry run black --max-line-length 88 --ignore F401, F841, W503 .
+
 
         - name: Pytest
           run: |
