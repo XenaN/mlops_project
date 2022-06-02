@@ -13,7 +13,9 @@ def test_output():
     files.remove(".gitignore")
     if len(files) != 0:
         for file in files:
-            df = pd.read_csv(f"{EXTERNAL_PATH}{file}", index_col=False, encoding="latin1")
+            df = pd.read_csv(
+                f"{EXTERNAL_PATH}{file}", index_col=False, encoding="latin1"
+            )
             df_ge = ge.from_pandas(df)
             expected_columns = [
                 "network_countrycode",
@@ -48,15 +50,20 @@ def test_output():
                 is True
             )
             assert (
-                df_ge.expect_column_values_to_not_be_null(column="value_datetime_begin").success
+                df_ge.expect_column_values_to_not_be_null(
+                    column="value_datetime_begin"
+                ).success
                 is True
             )
             assert (
-                df_ge.expect_column_values_to_not_be_null(column="value_datetime_end").success is True
+                df_ge.expect_column_values_to_not_be_null(
+                    column="value_datetime_end"
+                ).success
+                is True
             )
             assert (
-                    df_ge.expect_column_values_to_not_be_null(
-                        column="station_code").success is True
+                df_ge.expect_column_values_to_not_be_null(column="station_code").success
+                is True
             )
             assert (
                 df_ge.expect_column_values_to_be_of_type(
@@ -64,4 +71,3 @@ def test_output():
                 ).success
                 is True
             )
-
