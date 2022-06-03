@@ -24,7 +24,7 @@
             virtualenvs-in-project: true
 
         - name: Install dependencies
-          run: poetry install flake8 black --no-interaction --no-root
+          run: poetry add flake8 black --no-interaction --no-root
 
         - name: Black
           run: poetry run black --line-length 88 --check $(git ls-files '*.py')
