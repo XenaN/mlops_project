@@ -23,14 +23,9 @@
             python3.9 -m venv ~/.venv
             source ~/.venv/bin/activate
             pip3 install flake8 black
-
-        - name: Run Black
-          run: |
-            pip3 list
             black --line-length 88 --check $(git ls-files '*.py')
+            flake8 --max-line-length 88 --ignore F401,F841,W503 $(git ls-files '*.py')
 
-        - name: Linter
-          run: flake8 --max-line-length 88 --ignore F401,F841,W503 $(git ls-files '*.py')
 
     test_step:
       runs-on: ubuntu-latest
