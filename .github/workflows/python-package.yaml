@@ -26,7 +26,6 @@
         - name: Installation libs
           run: |
             pip install flake8 black
-            pip list
 
         - name: Run Black
           run: black . --line-length 88 --check
@@ -64,5 +63,6 @@
 
         - name: Pytest
           run: |
+            poetry show --tree
             poetry run dvc pull
             poetry run pytest --disable-warnings
