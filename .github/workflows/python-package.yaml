@@ -17,15 +17,20 @@
           with:
             python-version: 3.9
 
-        - name: Installation libs
-          run: |
-            python3.9 -m pip install --upgrade pip
-            python3.9 -m venv ~/.venv
-            source ~/.venv/bin/activate
-            pip3 install flake8 black
-            black --line-length 88 --check $(git ls-files '*.py')
-            flake8 --max-line-length 88 --ignore F401,F841,W503 $(git ls-files '*.py')
+        - name: Install Poetry
+          uses: snok/install-poetry@v1
+          with:
+            virtualenvs-create: true
+            virtualenvs-in-project: true
 
+        - name: Install dependencies
+          run: poetry install flake8 black --no-interaction --no-root
+
+        - name: Black
+          run: poetry run black --line-length 88 --check $(git ls-files '*.py')
+
+        - name: Linter
+          run: poetry run flake8 --max-line-length 88 --ignore F401,F841,W503 $(git ls-files '*.py')
 
     test_step:
       runs-on: ubuntu-latest
