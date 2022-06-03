@@ -1,13 +1,35 @@
   on:
     push:
       branches:
-        - main
+        - '*'
     pull_request:
       branches:
         - main
 
   jobs:
-    build_one:
+    linter_step:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Install Python 3.9
+          uses: actions/setup-python@v2
+          with:
+            python-version: 3.9
+
+        - name: Installation libs
+          run: |
+          python -m pip install --upgrade pip
+          python3.9 -m venv ~/.venv
+          source ~/.venv/bin/activate
+          pip install flake8, black
+
+        - name: Run Black
+          run: black --line-length 88 --check $(git ls-files '*.py')
+
+        - name: Linter
+          run: flake8 --max-line-length 88 --ignore F401,F841,W503 $(git ls-files '*.py')
+
+
+    test_step:
       runs-on: ubuntu-latest
       steps:
         - name: Install Python 3.9
@@ -26,18 +48,12 @@
           id: cached-poetry-dependencies
           uses: actions/cache@v3
           with:
-            path: .venv
-            key: venv-${{ runner.os }}-mycache-v1-${{ hashFiles('**/poetry.lock') }}
+            path: ${{ env.pythonLocation }}
+            key: ${{ env.pythonLocation }}-${{ runner.os }}-mycache-v1-${{ hashFiles('**/poetry.lock') }}
 
         - name: Install dependencies
           if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
           run: poetry install --no-interaction --no-root
-
-        - name: Run Black
-          run: poetry run black --line-length 88 --check $(git ls-files '*.py')
-
-        - name: Linter
-          run: poetry run flake8 --max-line-length 88 --ignore F401,F841,W503 $(git ls-files '*.py')
 
         - name: Pytest
           run: |
