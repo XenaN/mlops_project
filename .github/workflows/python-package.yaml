@@ -63,6 +63,5 @@
 
         - name: Pytest
           run: |
-            poetry install --no-interaction --no-root
             poetry run dvc pull
             poetry run pytest --disable-warnings
