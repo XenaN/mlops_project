@@ -54,12 +54,12 @@
           id: cached-poetry-dependencies
           uses: actions/cache@v3
           with:
-            path: ${{ env.pythonLocation }}
-            key: ${{ env.pythonLocation }}-${{ runner.os }}-mycache-v1-${{ hashFiles('**/poetry.lock') }}
+            path: .venv
+            key: venv-${{ runner.os }}-mycache-v1-${{ hashFiles('**/poetry.lock') }}
 
         - name: Install dependencies
+          run: poetry install
           if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-          run: poetry install --no-interaction --no-root
 
         - name: Pytest
           run: |
