@@ -20,12 +20,11 @@
         - name: Activate venv
           run: |
             python3.9 -m pip install --upgrade pip
-            python3.9 -m venv env
-            source env/bin/activate
+            python3.9 -m venv venv
+            source venv/bin/activate
 
         - name: Installation libs
           run: |
-            echo "VIRTUAL ENV:" $VIRTUAL_ENV
             pip install flake8 black
             pip list
 
@@ -33,7 +32,7 @@
           run: black . --line-length 88 --check
 
         - name: Linter
-          run: flake8 . --max-line-length 88 --ignore F401,F841,W503
+          run: flake8 $(git ls-files '*.py') --max-line-length 88 --ignore F401,F841,W503
 
 
     test_step:
