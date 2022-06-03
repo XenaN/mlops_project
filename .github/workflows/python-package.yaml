@@ -13,7 +13,7 @@
         - uses: actions/checkout@v3
 
         - name: Install Python 3.9
-          uses: actions/setup-python@v2
+          uses: actions/setup-python@v3
           with:
             python-version: 3.9
 
@@ -34,7 +34,7 @@
       runs-on: ubuntu-latest
       steps:
         - name: Install Python 3.9
-          uses: actions/setup-python@v2
+          uses: actions/setup-python@v3
           with:
             python-version: 3.9
 
@@ -45,6 +45,7 @@
             virtualenvs-in-project: true
 
         - uses: actions/checkout@v3
+
         - name: Cache dependencies
           id: cached-poetry-dependencies
           uses: actions/cache@v3
