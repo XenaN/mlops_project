@@ -22,10 +22,8 @@
             python3.9 -m pip install --upgrade pip
             python3.9 -m venv ~/.venv
             source ~/.venv/bin/activate
-            pip install flake8 black
-            echo "export PATH=\"`python3 -m site --user-base`/bin:\$PATH\"" >> ~/.bashrc
-            source ~/.bashrc
-            pip list
+            pip3 install flake8 black
+            pip3 list
 
         - name: Run Black
           run: black --line-length 88 --check $(git ls-files '*.py')
