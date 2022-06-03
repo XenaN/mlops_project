@@ -23,6 +23,7 @@
             python3.9 -m venv ~/.venv
             source ~/.venv/bin/activate
             pip install flake8 black
+            pip list
 
         - name: Run Black
           run: black --line-length 88 --check $(git ls-files '*.py')
