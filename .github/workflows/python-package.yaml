@@ -17,20 +17,24 @@
           with:
             python-version: 3.9
 
-        - name: Install Poetry
-          uses: snok/install-poetry@v1
-          with:
-            virtualenvs-create: true
-            virtualenvs-in-project: true
+        - name: Activate venv
+          run: |
+            python3.9 -m pip install --upgrade pip
+            python3.9 -m venv env
+            source env/bin/activate
 
-        - name: Install dependencies
-          run: poetry add flake8 black
+        - name: Installation libs
+          run: |
+            echo "VIRTUAL ENV:" $VIRTUAL_ENV
+            pip install flake8 black
+            pip list
 
-        - name: Black
-          run: poetry run black --line-length 88 --check $(git ls-files '*.py')
+        - name: Run Black
+          run: black . --line-length 88 --check
 
         - name: Linter
-          run: poetry run flake8 --max-line-length 88 --ignore F401,F841,W503 $(git ls-files '*.py')
+          run: flake8 . --max-line-length 88 --ignore F401,F841,W503
+
 
     test_step:
       runs-on: ubuntu-latest
