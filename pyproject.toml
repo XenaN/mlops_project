@@ -25,6 +25,7 @@ python-multipart = "^0.0.5"
 pytest = "^7.1.2"
 lightgbm = "^3.3.2"
 xgboost = "^1.6.1"
+great-expectations = "^0.15.7"
 
 [tool.poetry.dev-dependencies]
 

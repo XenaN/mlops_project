@@ -220,10 +220,7 @@ def create_common_dataset(input_path: str, output_path: str):
         dataset = pd.read_csv(path)
 
         assert len(dataset["UnitOfMeasurement"].unique()) == 1
-        print(
-            dataset["UnitOfMeasurement"].unique()[0],
-            metadata["units"][pollutant],
-        )
+
         if metadata["units"][pollutant] != dataset["UnitOfMeasurement"].unique()[0]:
             change_units(dataset, metadata["molar_mass"], metadata["units"][pollutant])
         else:
