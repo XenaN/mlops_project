@@ -4,7 +4,7 @@ import joblib as jb
 from typing import List
 
 import pandas as pd
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 
 @click.command()
@@ -25,7 +25,8 @@ def evaluate(input_path: List[str], output_path: str):
 
     y_predicted = model.predict(test_X)
 
-    score = dict(rmse=mean_squared_error(test_y, y_predicted, squared=False))
+    score = dict(rmse=mean_squared_error(test_y, y_predicted, squared=False),
+                 mae=mean_absolute_error(test_y, y_predicted))
 
     with open(output_path, "w") as f:
         json.dump(score, f)
