@@ -4,9 +4,9 @@ WORKDIR /code
 
 RUN pip install --upgrade pip
 RUN pip install poetry
+RUN echo $(ls -1 .)
 
 COPY ./pyproject.toml ./poetry.lock /code/
-RUN echo $(ls -1 /tmp/dir)
 COPY ./src/app /code/app
 
 RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi
