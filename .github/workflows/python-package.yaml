@@ -74,14 +74,14 @@
 
         steps:
           - name: Checkout code
-            uses: actions/checkout@v2
+            uses: actions/checkout@v3
 
           - name: Set up Docker Buildx
             id: buildx
-            uses: docker/setup-buildx-action@v1
+            uses: docker/setup-buildx-action@v2
 
           - name: Login to DockerHub
-            uses: docker/login-action@v1
+            uses: docker/login-action@v2
             with:
               username: ${{ secrets.DOCKERHUB_USERNAME }}
               password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -99,14 +99,14 @@
               ls
 
           - name: Build image and push to Docker Hub and GitHub Container Registry
-            uses: docker/build-push-action@v2
+            uses: docker/build-push-action@v3
             with:
-              context: ./docker/model_service/Dockerfile
+              context: ./docker/model_service
               tags: |
                 xenan/model_service:latest 
                 ghcr.io/xenan/model_service:latest
               # build on feature branches, push only on main branch
-              push: ${{ github.ref == 'refs/heads/main' }}
+              push: true
 
           - name: Image digest
             run: echo ${{ steps.docker_build.outputs.digest }}
