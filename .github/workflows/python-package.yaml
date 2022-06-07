@@ -96,7 +96,8 @@
           - name: Build image and push to Docker Hub and GitHub Container Registry
             uses: docker/build-push-action@v3
             with:
-              context: ./docker/model_service
+              context: .
+              file: docker/model_service/Dockerfile
               tags: |
                 xenan/model_service:latest 
                 ghcr.io/xenan/model_service:latest
