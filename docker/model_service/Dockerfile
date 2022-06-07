@@ -4,7 +4,7 @@ WORKDIR /code
 
 RUN pip install --upgrade pip
 RUN pip install poetry
-RUN echo $(ls -1 .)
+RUN file="$(ls -1 ./)" && echo $file
 
 COPY ./pyproject.toml ./poetry.lock /code/
 COPY ./src/app /code/app
