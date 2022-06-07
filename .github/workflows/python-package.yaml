@@ -93,12 +93,16 @@
               username: ${{ github.actor }}
               password: ${{ secrets.GHCR_PAT }}
           - name: Check
-            run: ls
+            run: |
+            ls
+            cd docker
+            cd model_service
+            ls
 
           - name: Build image and push to Docker Hub and GitHub Container Registry
             uses: docker/build-push-action@v2
             with:
-              context: docker/model_service/Dockerfile
+              context: ./docker/model_service/Dockerfile
               tags: |
                 xenan/model_service:latest 
                 ghcr.io/xenan/model_service:latest
