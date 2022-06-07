@@ -102,6 +102,7 @@
                 ghcr.io/xenan/model_service:latest
               # build on feature branches, push only on main branch
               push: true
+              no-cache: true
 
           - name: Image digest
             run: echo ${{ steps.docker_build.outputs.digest }}
