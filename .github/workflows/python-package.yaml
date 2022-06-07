@@ -28,7 +28,7 @@
             pip install flake8 black
 
         - name: Run Black
-          run: black . --line-length 88 --check
+          run: black . --line-length 88 --exclude '(venv)' --check
 
         - name: Linter
           run: flake8 $(git ls-files '*.py') --max-line-length 88 --ignore F401,F841,W503
