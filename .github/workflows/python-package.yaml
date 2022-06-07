@@ -94,10 +94,10 @@
               password: ${{ secrets.GHCR_PAT }}
           - name: Check
             run: |
-            ls
-            cd docker
-            cd model_service
-            ls
+              ls
+              cd docker
+              cd model_service
+              ls
 
           - name: Build image and push to Docker Hub and GitHub Container Registry
             uses: docker/build-push-action@v2
