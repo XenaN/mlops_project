@@ -99,7 +99,7 @@
               file: docker/model_service/Dockerfile
               tags: |
                 dev/app/model_service:latest 
-                ghcr.io/dev/app//model_service:latest
+                ghcr.io/dev/app/model_service:latest
               push: true
 
           - name: Image digest
