@@ -98,8 +98,8 @@
               context: .
               file: docker/model_service/Dockerfile
               tags: |
-                ${{ github.repository_owner }}/model_service:latest 
-                ghcr.io/${{ github.repository_owner }}/model_service:latest
+                dev/app/model_service:latest 
+                ghcr.io/dev/app//model_service:latest
               push: true
 
           - name: Image digest
