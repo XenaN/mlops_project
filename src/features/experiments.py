@@ -9,9 +9,9 @@ from sklearn.ensemble import RandomForestRegressor
 from xgboost import XGBRegressor
 
 
-def create_x_y_datasets(df: pd.DataFrame,
-                        cols: List[str],
-                        depth: int) -> Tuple[pd.DataFrame, pd.Series]:
+def create_x_y_datasets(
+    df: pd.DataFrame, cols: List[str], depth: int
+) -> Tuple[pd.DataFrame, pd.Series]:
     """
 
     :param df: dataframe
@@ -19,7 +19,7 @@ def create_x_y_datasets(df: pd.DataFrame,
     :param depth: number of shift
     :return: tables
     """
-    y = df['AQI'].copy()
+    y = df["AQI"].copy()
     x_list = [df[cols].shift(i) for i in range(1, depth + 1)]
     x = pd.concat(x_list, axis=1)
     x.columns = list(range(len(x.columns)))
@@ -29,8 +29,9 @@ def create_x_y_datasets(df: pd.DataFrame,
     return x, y
 
 
-def choose_day_number(columns: List[str], df: pd.DataFrame,
-                      n: int, model) -> Dict[str, List[float]]:
+def choose_day_number(
+    columns: List[str], df: pd.DataFrame, n: int, model
+) -> Dict[str, List[float]]:
     """
     Default
     :param columns: list of column names
@@ -43,8 +44,9 @@ def choose_day_number(columns: List[str], df: pd.DataFrame,
     for depth in range(1, n):
         x, y = create_x_y_datasets(df, columns, depth)
 
-        X_train, X_test, y_train, y_test = train_test_split(x, y, shuffle=False,
-                                                            random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(
+            x, y, shuffle=False, random_state=42
+        )
 
         model.fit(X_train, y_train)
 
@@ -56,8 +58,9 @@ def choose_day_number(columns: List[str], df: pd.DataFrame,
     return rmse_dict
 
 
-def search_best_params(columns: List[str], df: pd.DataFrame,
-                       depth: int, n_cv: int, grid: Dict, model):
+def search_best_params(
+    columns: List[str], df: pd.DataFrame, depth: int, n_cv: int, grid: Dict, model
+):
     """
     Random search hyperparameters
     :param columns: list of column names
@@ -71,20 +74,23 @@ def search_best_params(columns: List[str], df: pd.DataFrame,
     x, y = create_x_y_datasets(df, columns, depth)
 
     tscv = TimeSeriesSplit(n_splits=n_cv)
-    rf_random = RandomizedSearchCV(estimator=model,
-                                   param_distributions=grid,
-                                   n_iter=500,
-                                   cv=tscv,
-                                   verbose=0,
-                                   random_state=42,
-                                   n_jobs=-1)
+    rf_random = RandomizedSearchCV(
+        estimator=model,
+        param_distributions=grid,
+        n_iter=500,
+        cv=tscv,
+        verbose=0,
+        random_state=42,
+        n_jobs=-1,
+    )
 
     rf_random.fit(x, y)
     return rf_random.best_estimator_
 
 
-def predict_best_model(df: pd.DataFrame, columns: List[str],
-                       depth: int, model) -> Tuple[float, float]:
+def predict_best_model(
+    df: pd.DataFrame, columns: List[str], depth: int, model
+) -> Tuple[float, float]:
     """
     Error of best model prediction
     :param columns: list of column names
@@ -94,13 +100,12 @@ def predict_best_model(df: pd.DataFrame, columns: List[str],
     :return: error tuple
     """
     x, y = create_x_y_datasets(df, columns, depth)
-    X_train, X_test, y_train, y_test = train_test_split(x, y, shuffle=False,
-                                                        random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(
+        x, y, shuffle=False, random_state=42
+    )
     model.fit(X_train, y_train)
     predictions = model.predict(X_test)
     best_rmse = mean_squared_error(y_test, predictions, squared=False)
     best_mae = mean_absolute_error(y_test, predictions)
 
     return best_rmse, best_mae
-
-
