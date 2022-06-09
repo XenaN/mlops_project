@@ -6,7 +6,7 @@ from typing import List
 import mlflow
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 from dotenv import load_dotenv
 
 
@@ -54,7 +54,10 @@ def train(input_path: List[str], output_path: str):
 
         y_predicted = forest_model.predict(test_X)
 
-        score = dict(rmse=mean_squared_error(test_y, y_predicted, squared=False))
+        score = dict(
+            rmse=mean_squared_error(test_y, y_predicted, squared=False),
+            mae=mean_absolute_error(test_y, y_predicted),
+        )
 
         mlflow.log_metrics(score)
         mlflow.sklearn.log_model(
