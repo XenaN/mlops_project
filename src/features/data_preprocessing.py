@@ -68,7 +68,7 @@ def get_CO_subindex(x: float):
     elif x <= 50.4:
         return get_subindex(I_low=401, I_hi=500, c_low=40.5, c_hi=50.4, c=x)
     elif x > 50.4:
-        return np.Inf
+        return 500
     else:
         return None
 
@@ -114,7 +114,7 @@ def get_NO2_subindex(x: float):
     elif x <= 2049:
         return get_subindex(I_low=401, I_hi=500, c_low=1650, c_hi=2049, c=x)
     elif x > 2049:
-        return np.Inf
+        return 500
     else:
         return None
 
@@ -158,7 +158,7 @@ def get_PM10_subindex(x: float):
     elif x <= 604:
         return get_subindex(I_low=401, I_hi=500, c_low=505, c_hi=604, c=x)
     elif x > 604:
-        return np.Inf
+        return 500
     else:
         return None
 
@@ -183,7 +183,7 @@ def getPM25_subindex(x: float):
     elif x <= 500.4:
         return get_subindex(I_low=401, I_hi=500, c_low=350.5, c_hi=500.4, c=x)
     elif x > 500.4:
-        return np.Inf
+        return 500
     else:
         return None
 
