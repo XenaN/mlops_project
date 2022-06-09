@@ -1,114 +1,12 @@
 version: '3.8'
 
 services:
-    
-    minio:
-        container_name: minio
-        hostname: minio
-        image: quay.io/minio/minio:RELEASE.2022-05-08T23-50-31Z
-        command: server --console-address ":9001" /data/
-        expose:
-            - "9000"
-            - "9001"
-        networks:
-            - s3
-        environment:
-            MINIO_ACCESS_KEY: ${AWS_ACCESS_KEY_ID}
-            MINIO_SECRET_KEY: ${AWS_SECRET_ACCESS_KEY}
-        healthcheck:
-            test: ["CMD", "curl", "-f", "htttp://localhost:9000/minio/health/live"]
-            interval: 30s
-            timeout: 20s
-            retries: 3
-        volumes:
-            - ./docker/minio/:/data/
-    
-    nginx:
-        image: nginx:1.19.2-alpine
-        container_name: nginx
-        hostname: nginx
-        volumes:
-            - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
-        ports:
-            - "9000:9000"
-            - "9001:9001"
-        networks:
-            - s3
-        depends_on:
-            - minio
-   
-    db:
-        image: postgres
-        container_name: postgres
-        restart: always
-        environment: 
-            POSTGRES_USER: ${POSTGRES_USER}
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-            POSTGRES_DB: ${POSTGRES_DB}
-            PGDATA: /data/postgres
-        volumes:
-            - postgres:/data/postgres
-        ports:
-            - "5434:5434"
-        networks:
-            - postgres
-
-    pgadmin:
-        image: dpage/pgadmin4
-        container_name: pgadmin
-        restart: always
-        environment: 
-            PGADMIN_DEFAULT_EMAIL: admin@admin.com
-            PGADMIN_DEFAULT_PASSWORD: root
-        volumes:
-            - ./docker/pgadmin/:/varlib/pgadmin
-        ports:
-            - "5050:80"
-        networks:
-            - postgres
-
-    mlflow:
-        image: mlflow_server
-        container_name: mlflow_server
-        restart: always
-        environment: 
-            - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-            - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-            - MLFLOW_S3_ENDPOINT_URL=http://nginx:9000
-        ports:
-            - "5000:5000"
-        networks:
-            - postgres
-            - s3
-        command: mlflow server --backend-store-uri postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB} --default-artifact-root s3://${AWS_S3_BUCKET}/ --host 0.0.0.0
 
     app:
-        image: model_service
-        container_name: model_service
+        image: "ghcr.io/${{ github.repository_owner }}/model_service:latest"
+        container_name: dev_model_service
         ports:
-            - "8003:80"
-        networks:
-            - s3
+            - "8004:81"
         environment:
-            - MLFLOW_S3_ENDPOINT_URL=http://nginx:9000
-            - MLFLOW_TRACKING_URI=http://mlflow:5000
-    
-    nexus:
-        image: sonatype/nexus3:latest
-        container_name: nexus
-        ports:
-            - "8081:8081"
-            - "8123:8123"
-        volumes:
-            - nexus:/nexus-data
-            
-networks:
-    s3:
-        driver: bridge
-    postgres:
-        driver: bridge
-
-volumes:
-    postgres: 
-    nexus:
-    
+            - MLFLOW_S3_ENDPOINT_URL=http://192.168.1.150:9000
+            - MLFLOW_TRACKING_URI=http://192.168.1.150:5000

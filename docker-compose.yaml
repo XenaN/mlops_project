@@ -92,6 +92,15 @@ services:
         environment:
             - MLFLOW_S3_ENDPOINT_URL=http://nginx:9000
             - MLFLOW_TRACKING_URI=http://mlflow:5000
+    
+    nexus:
+        image: sonatype/nexus3:latest
+        container_name: nexus
+        ports:
+            - "8081:8081"
+            - "8123:8123"
+        volumes:
+            - nexus:/nexus-data
             
 networks:
     s3:
@@ -101,4 +110,5 @@ networks:
 
 volumes:
     postgres: 
+    nexus:
     
