@@ -118,5 +118,5 @@
               password: ${{ secrets.GHCR_PAT }}
 
           - name: Deploy
-            run: | 
-              docker compose -p dev -f docker-compose.dev.yaml up -d --build
+            script: | 
+                docker compose -p dev -f docker-compose.dev.yaml up -d --build
