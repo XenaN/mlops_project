@@ -97,7 +97,7 @@
               context: .
               file: docker/model_service/Dockerfile
               tags: |
-                ghcr.io/$ {{ github.repository_owner }} /model_service:latest
+                ghcr.io/mlops/model_service:latest
               push: true
 
           - name: Image digest
