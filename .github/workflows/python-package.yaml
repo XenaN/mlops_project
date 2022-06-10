@@ -119,6 +119,5 @@
 
           - name: Deploy
             run: |
-              docker ps -a
               docker pull ghcr.io/xenan/model_service:latest
-              docker compose -p dev -f docker-compose.dev.yaml
+              docker compose -p dev -f docker-compose.dev.yaml up -d --build
