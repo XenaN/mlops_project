@@ -40,9 +40,9 @@ def merge_eea_data(input_path: List[str], output_path: str):
 
     input_file = pathlib.Path(input_path[1])
     if input_file.is_file():
-        updated_data = pd.read_csv(
-            input_path[1], index_col=False, encoding="latin1"
-        ).rename(COLUMNS, axis="columns")
+        updated_data = pd.read_csv(input_path[1], index_col=False).rename(
+            COLUMNS, axis="columns"
+        )
     else:
         updated_data = pd.read_csv(input_path[0], index_col=False)
         updated_data["Datetime"] = pd.to_datetime(updated_data["DatetimeEnd"])
