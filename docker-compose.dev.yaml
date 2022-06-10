@@ -3,7 +3,7 @@ version: '3.8'
 services:
 
     app:
-        image: ghcr.io/XenaN/model_service:latest
+        image: ghcr.io/$$ {{github.repository_owner }} /model_service:latest
         container_name: dev_model_service
         ports:
             - "8004:81"

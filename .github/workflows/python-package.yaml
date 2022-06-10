@@ -100,9 +100,6 @@
                 ghcr.io/xenan/model_service:latest
               push: true
 
-          - name: Image digest
-            run: echo ${{ steps.docker_build.outputs.digest }}
-
     deployment:
         runs-on: self-hosted
         needs: [build-and-push-docker-image]
