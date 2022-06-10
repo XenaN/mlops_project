@@ -97,8 +97,7 @@
               context: .
               file: docker/model_service/Dockerfile
               tags: |
-                xenan/model_service:latest 
-                ghcr.io/xenan/model_service:latest
+                ghcr.io/$ {{ github.repository_owner }} /model_service:latest
               push: true
 
           - name: Image digest
