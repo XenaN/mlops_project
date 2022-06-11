@@ -104,6 +104,8 @@
         runs-on: self-hosted
 #        needs: [build-and-push-docker-image]
         steps:
+          - name: Checkout code
+            uses: actions/checkout@v3
           - name: Login to DockerHub
             uses: docker/login-action@v2
             with:
@@ -119,5 +121,4 @@
 
           - name: Deploy
             run: |
-              docker pull ghcr.io/xenan/model_service:latest
               docker compose -f docker-compose.dev.yaml up -d --build
