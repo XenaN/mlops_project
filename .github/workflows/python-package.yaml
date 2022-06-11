@@ -7,69 +7,69 @@
         - main
 
   jobs:
-#    linter_step:
-#      runs-on: ubuntu-latest
-#      steps:
-#        - uses: actions/checkout@v3
-#
-#        - name: Install Python 3.9
-#          uses: actions/setup-python@v3
-#          with:
-#            python-version: 3.9
-#
-#        - name: Activate venv
-#          run: |
-#            python3.9 -m pip install --upgrade pip
-#            python3.9 -m venv venv
-#            source venv/bin/activate
-#
-#        - name: Installation libs
-#          run: |
-#            pip install flake8 black
-#
-#        - name: Run Black
-#          run: black . --line-length 88 --exclude '(venv)' --check
-#
-#        - name: Linter
-#          run: flake8 $(git ls-files '*.py') --max-line-length 88 --ignore F401,F841,W503
-#
-#
-#    test_step:
-#      runs-on: ubuntu-latest
-#      steps:
-#        - name: Install Python 3.9
-#          uses: actions/setup-python@v3
-#          with:
-#            python-version: 3.9
-#
-#        - name: Install Poetry
-#          uses: snok/install-poetry@v1
-#          with:
-#            virtualenvs-create: true
-#            virtualenvs-in-project: true
-#
-#        - uses: actions/checkout@v3
-#
-#        - name: Cache dependencies
-#          id: cached-poetry-dependencies
-#          uses: actions/cache@v3
-#          with:
-#            path: .venv
-#            key: venv-${{ runner.os }}-mycache-v1-${{ hashFiles('**/poetry.lock') }}
-#
-#        - name: Install dependencies
-#          run: poetry install
-#          if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-#
-#        - name: Pytest
-#          run: |
-#            poetry run dvc pull
-#            poetry run pytest --disable-warnings
+    linter_step:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+
+        - name: Install Python 3.9
+          uses: actions/setup-python@v3
+          with:
+            python-version: 3.9
+
+        - name: Activate venv
+          run: |
+            python3.9 -m pip install --upgrade pip
+            python3.9 -m venv venv
+            source venv/bin/activate
+
+        - name: Installation libs
+          run: |
+            pip install flake8 black
+
+        - name: Run Black
+          run: black . --line-length 88 --exclude '(venv)' --check
+
+        - name: Linter
+          run: flake8 $(git ls-files '*.py') --max-line-length 88 --ignore F401,F841,W503
+
+
+    test_step:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Install Python 3.9
+          uses: actions/setup-python@v3
+          with:
+            python-version: 3.9
+
+        - name: Install Poetry
+          uses: snok/install-poetry@v1
+          with:
+            virtualenvs-create: true
+            virtualenvs-in-project: true
+
+        - uses: actions/checkout@v3
+
+        - name: Cache dependencies
+          id: cached-poetry-dependencies
+          uses: actions/cache@v3
+          with:
+            path: .venv
+            key: venv-${{ runner.os }}-mycache-v1-${{ hashFiles('**/poetry.lock') }}
+
+        - name: Install dependencies
+          run: poetry install
+          if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+
+        - name: Pytest
+          run: |
+            poetry run dvc pull
+            poetry run pytest --disable-warnings
 
 
     build-and-push-docker-image:
         runs-on: ubuntu-latest
-#        needs: [linter_step, test_step]
+        needs: [linter_step, test_step]
         steps:
           - name: Checkout code
             uses: actions/checkout@v3
