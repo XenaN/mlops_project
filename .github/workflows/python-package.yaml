@@ -121,4 +121,7 @@
 
           - name: Deploy
             run: |
+              docker stop $(docker ps -a | grep dev | awk '{print $1}') || true
+              docker rm $(docker ps -a | grep dev | awk '{print $1}') || true
+              docker volume rm $(docker volume  ls | grep dev | awk '{print $2}') || true
               docker compose -p dev -f docker-compose.dev.yaml up -d --build
