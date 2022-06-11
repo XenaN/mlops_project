@@ -12,16 +12,15 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 @click.argument("output_path", type=click.Path())
 def evaluate(input_path: List[str], output_path: str):
     """
-
-    :param input_path:
-    :param output_path:
-    :return:
+    Saving score
+    :param input_path: path of current model
+    :param output_path: path for saving score
     """
     test_df = pd.read_csv(input_path[0])
     model = jb.load(input_path[1])
 
-    test_X = test_df["AQI"].values.reshape(-1, 1)
-    test_y = test_df["AQI_t+1"].values
+    test_X = test_df["AQI"]
+    test_y = test_df.drop("AQI", axis=1)
 
     y_predicted = model.predict(test_X)
 

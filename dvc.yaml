@@ -55,7 +55,7 @@ stages:
       - data/processed/AQI_dataset.csv
 
   prepare_dataset:
-    cmd: python src/models/prepare_datasets.py 1 data/processed/AQI_dataset.csv data/processed/train.csv data/processed/test.csv
+    cmd: python src/models/prepare_datasets.py 4 data/processed/AQI_dataset.csv data/processed/train.csv data/processed/test.csv
     deps:
       - data/processed/AQI_dataset.csv
       - src/models/prepare_datasets.py

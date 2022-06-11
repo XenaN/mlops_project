@@ -5,13 +5,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 from sklearn.model_selection import RandomizedSearchCV, GridSearchCV
-from sklearn.ensemble import RandomForestRegressor
-from xgboost import XGBRegressor
 
 
 def create_x_y_datasets(
     df: pd.DataFrame, cols: List[str], depth: int
-) -> Tuple[pd.DataFrame, pd.Series]:
+) -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame, pd.Series]:
     """
 
     :param df: dataframe
@@ -26,7 +24,11 @@ def create_x_y_datasets(
 
     x = x.iloc[depth:]
     y = y.iloc[depth:]
-    return x, y
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        x, y, shuffle=False, random_state=42
+    )
+    return X_train, X_test, y_train, y_test
 
 
 def choose_day_number(
@@ -42,11 +44,7 @@ def choose_day_number(
     """
     rmse_dict = {"rmse": [], "mae": []}
     for depth in range(1, n):
-        x, y = create_x_y_datasets(df, columns, depth)
-
-        X_train, X_test, y_train, y_test = train_test_split(
-            x, y, shuffle=False, random_state=42
-        )
+        X_train, X_test, y_train, y_test = create_x_y_datasets(df, columns, depth)
 
         model.fit(X_train, y_train)
 
@@ -71,7 +69,7 @@ def search_best_params(
     :param grid: grid of parameters
     :return: model with best parameters
     """
-    x, y = create_x_y_datasets(df, columns, depth)
+    X_train, X_test, y_train, y_test = create_x_y_datasets(df, columns, depth)
 
     tscv = TimeSeriesSplit(n_splits=n_cv)
     rf_random = RandomizedSearchCV(
@@ -84,8 +82,8 @@ def search_best_params(
         n_jobs=-1,
     )
 
-    rf_random.fit(x, y)
-    return rf_random.best_estimator_
+    rf_random.fit(X_train, y_train)
+    return rf_random
 
 
 def predict_best_model(
@@ -99,10 +97,8 @@ def predict_best_model(
     :param model: model for fitting
     :return: error tuple
     """
-    x, y = create_x_y_datasets(df, columns, depth)
-    X_train, X_test, y_train, y_test = train_test_split(
-        x, y, shuffle=False, random_state=42
-    )
+    X_train, X_test, y_train, y_test = create_x_y_datasets(df, columns, depth)
+
     model.fit(X_train, y_train)
     predictions = model.predict(X_test)
     best_rmse = mean_squared_error(y_test, predictions, squared=False)
