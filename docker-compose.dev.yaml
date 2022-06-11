@@ -8,5 +8,5 @@ services:
         ports:
             - "8004:81"
         environment:
-            - MLFLOW_S3_ENDPOINT_URL=http://192.168.0.176:9000
-            - MLFLOW_TRACKING_URI=http://192.168.0.176:5000
+            - MLFLOW_S3_ENDPOINT_URL="http://192.168.0.176:9000"
+            - MLFLOW_TRACKING_URI="http://192.168.0.176:5000"
