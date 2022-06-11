@@ -45,6 +45,11 @@ If you run two functions in one day then updated data will be the same historica
 All data is saved in *data/raw*.
 Merged dataframes are saved into *data/interim*.
 
+If you want to change any script, install pre-commit 
+```
+pre-commit install
+```
+
 
 ### Repo structure:
 #### (cookiecutter style)
