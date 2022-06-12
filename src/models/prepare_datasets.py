@@ -19,6 +19,7 @@ def prepare_dataset(depth: int, input_path: str, output_path: List[str]):
     df = pd.read_csv(input_path, parse_dates=["Datetime"], index_col=["Datetime"])
 
     df_daily = df.resample("D").mean().interpolate()
+    df_daily = df_daily.loc["2020-04-03 00:00:00+01:00":"2021-01-01 00:00:00+01:00"]
 
     columns = [x for x in df_daily.columns if "avg" in x]
     x_list = [df_daily[columns].shift(i) for i in range(1, depth + 1)]
