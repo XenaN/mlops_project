@@ -19,8 +19,8 @@ def evaluate(input_path: List[str], output_path: str):
     test_df = pd.read_csv(input_path[0])
     model = jb.load(input_path[1])
 
-    test_X = test_df["AQI"]
-    test_y = test_df.drop("AQI", axis=1)
+    test_y = test_df["AQI"]
+    test_X = test_df.drop("AQI", axis=1)
 
     y_predicted = model.predict(test_X)
 

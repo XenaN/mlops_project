@@ -33,11 +33,11 @@ def train(input_path: List[str], output_path: str):
         assert isinstance(train_df, pd.DataFrame)
         assert isinstance(test_df, pd.DataFrame)
 
-        train_X = train_df["AQI"]
-        train_y = train_df.drop("AQI", axis=1)
+        train_y = train_df["AQI"]
+        train_X = train_df.drop("AQI", axis=1)
 
-        test_X = test_df["AQI"]
-        test_y = test_df.drop("AQI", axis=1)
+        test_y = test_df["AQI"]
+        test_X = test_df.drop("AQI", axis=1)
 
         tscv = TimeSeriesSplit(n_splits=3)
 

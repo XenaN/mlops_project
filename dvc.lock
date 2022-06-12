@@ -5,8 +5,8 @@ stages:
       data/external/ES_O3.csv data/interim/updated/ES_O3_updated.csv
     deps:
     - path: data/external/
-      md5: 4ab4e108e6e28adec5b9a7c623d885c8.dir
-      size: 31764102
+      md5: b48a1922a9c3d0626264a06b192a9a94.dir
+      size: 29076335
       nfiles: 7
     - path: data/interim/filtered
       md5: 0f773d4381037ae5460af6f3148e1a6f.dir
@@ -17,8 +17,8 @@ stages:
       size: 2650
     outs:
     - path: data/interim/updated/ES_O3_updated.csv
-      md5: 8d622e6da105429e57f12afee72cfc75
-      size: 3154381
+      md5: 22c327b5044b575475894a642b132b22
+      size: 3154378
   merge_data@NO:
     cmd: python src/data/data_raw_merge.py data/interim/filtered/ES_NO_filtered.csv
       data/external/ES_NO.csv data/interim/updated/ES_NO_updated.csv
@@ -43,8 +43,8 @@ stages:
       data/external/ES_PM10.csv data/interim/updated/ES_PM10_updated.csv
     deps:
     - path: data/external/
-      md5: 4ab4e108e6e28adec5b9a7c623d885c8.dir
-      size: 31764102
+      md5: b48a1922a9c3d0626264a06b192a9a94.dir
+      size: 29076335
       nfiles: 7
     - path: data/interim/filtered
       md5: 0f773d4381037ae5460af6f3148e1a6f.dir
@@ -55,15 +55,15 @@ stages:
       size: 2650
     outs:
     - path: data/interim/updated/ES_PM10_updated.csv
-      md5: 84d086e95e4960d0a37e1f17d7820d4f
-      size: 3214004
+      md5: bc2f20b4a4242a00e33645b8493a3afc
+      size: 3214012
   merge_data@PM2.5:
     cmd: python src/data/data_raw_merge.py data/interim/filtered/ES_PM2.5_filtered.csv
       data/external/ES_PM2.5.csv data/interim/updated/ES_PM2.5_updated.csv
     deps:
     - path: data/external/
-      md5: 4ab4e108e6e28adec5b9a7c623d885c8.dir
-      size: 31764102
+      md5: b48a1922a9c3d0626264a06b192a9a94.dir
+      size: 29076335
       nfiles: 7
     - path: data/interim/filtered
       md5: 0f773d4381037ae5460af6f3148e1a6f.dir
@@ -74,15 +74,15 @@ stages:
       size: 2650
     outs:
     - path: data/interim/updated/ES_PM2.5_updated.csv
-      md5: ea363db4df5b7bd9da38376feb41cde9
-      size: 3208730
+      md5: 2a390f9627f5089a811d6760c2470ad3
+      size: 3208741
   merge_data@NO2:
     cmd: python src/data/data_raw_merge.py data/interim/filtered/ES_NO2_filtered.csv
       data/external/ES_NO2.csv data/interim/updated/ES_NO2_updated.csv
     deps:
     - path: data/external/
-      md5: 4ab4e108e6e28adec5b9a7c623d885c8.dir
-      size: 31764102
+      md5: b48a1922a9c3d0626264a06b192a9a94.dir
+      size: 29076335
       nfiles: 7
     - path: data/interim/filtered
       md5: 0f773d4381037ae5460af6f3148e1a6f.dir
@@ -93,15 +93,15 @@ stages:
       size: 2650
     outs:
     - path: data/interim/updated/ES_NO2_updated.csv
-      md5: 7d47e8ec8b5a5a9a2badf71f41c0420b
-      size: 3150995
+      md5: 98c794d6165511974b40e7a136bff542
+      size: 3150993
   merge_data@CO:
     cmd: python src/data/data_raw_merge.py data/interim/filtered/ES_CO_filtered.csv
       data/external/ES_CO.csv data/interim/updated/ES_CO_updated.csv
     deps:
     - path: data/external/
-      md5: 4ab4e108e6e28adec5b9a7c623d885c8.dir
-      size: 31764102
+      md5: b48a1922a9c3d0626264a06b192a9a94.dir
+      size: 29076335
       nfiles: 7
     - path: data/interim/filtered
       md5: 0f773d4381037ae5460af6f3148e1a6f.dir
@@ -112,15 +112,15 @@ stages:
       size: 2650
     outs:
     - path: data/interim/updated/ES_CO_updated.csv
-      md5: f63478473a89b4630ada5869ad863780
-      size: 3113996
+      md5: 855d7c9d64d0f05bdc7066a76933e094
+      size: 3113994
   merge_data@SO2:
     cmd: python src/data/data_raw_merge.py data/interim/filtered/ES_SO2_filtered.csv
       data/external/ES_SO2.csv data/interim/updated/ES_SO2_updated.csv
     deps:
     - path: data/external/
-      md5: 4ab4e108e6e28adec5b9a7c623d885c8.dir
-      size: 31764102
+      md5: b48a1922a9c3d0626264a06b192a9a94.dir
+      size: 29076335
       nfiles: 7
     - path: data/interim/filtered
       md5: 0f773d4381037ae5460af6f3148e1a6f.dir
@@ -131,8 +131,8 @@ stages:
       size: 2650
     outs:
     - path: data/interim/updated/ES_SO2_updated.csv
-      md5: 49848d3c5871695b60786597007e40bf
-      size: 3156466
+      md5: 505e3b8a7c2c0b5260103151c7a8b17d
+      size: 3156464
   filter_data@NO2:
     cmd: python src/data/filter_data.py data/raw/ES_NO2/ data/interim/filtered/ES_NO2_filtered.csv
     deps:
@@ -232,44 +232,44 @@ stages:
     cmd: python src/data/clean_data.py data/interim/updated/ES_SO2_updated.csv data/interim/cleaned/ES_SO2_cleaned.csv
     deps:
     - path: data/interim/updated/
-      md5: 14f953bab5a2dedff9c05ba970ff661a.dir
-      size: 18998645
+      md5: 49c20cf1384161c1aaaebaeb3c077c3a.dir
+      size: 18998655
       nfiles: 7
     - path: src/data/clean_data.py
       md5: 01d71e8a381723cdb016544d772d053c
       size: 1420
     outs:
     - path: data/interim/cleaned/ES_SO2_cleaned.csv
-      md5: 6334b662f9aa7869e9b1db674ac26557
-      size: 3189687
+      md5: 1eba6b0cbf678e1072dab61580f62b12
+      size: 3192919
   clean_data@O3:
     cmd: python src/data/clean_data.py data/interim/updated/ES_O3_updated.csv data/interim/cleaned/ES_O3_cleaned.csv
     deps:
     - path: data/interim/updated/
-      md5: 14f953bab5a2dedff9c05ba970ff661a.dir
-      size: 18998645
+      md5: 49c20cf1384161c1aaaebaeb3c077c3a.dir
+      size: 18998655
       nfiles: 7
     - path: src/data/clean_data.py
       md5: 01d71e8a381723cdb016544d772d053c
       size: 1420
     outs:
     - path: data/interim/cleaned/ES_O3_cleaned.csv
-      md5: 62dc5649bdf6a0d7f11c0b40ce668b9e
-      size: 3187376
+      md5: b94da72c540ae820b69e129e0d14019d
+      size: 3190585
   clean_data@CO:
     cmd: python src/data/clean_data.py data/interim/updated/ES_CO_updated.csv data/interim/cleaned/ES_CO_cleaned.csv
     deps:
     - path: data/interim/updated/
-      md5: 14f953bab5a2dedff9c05ba970ff661a.dir
-      size: 18998645
+      md5: 49c20cf1384161c1aaaebaeb3c077c3a.dir
+      size: 18998655
       nfiles: 7
     - path: src/data/clean_data.py
       md5: 01d71e8a381723cdb016544d772d053c
       size: 1420
     outs:
     - path: data/interim/cleaned/ES_CO_cleaned.csv
-      md5: 00b67d4cd5ffa08a405a0f7462f5b2f6
-      size: 3146765
+      md5: a08ca4b29b60db4c34941f7a62763a44
+      size: 3149953
   clean_data@NO:
     cmd: python src/data/clean_data.py data/interim/updated/ES_NO_updated.csv data/interim/cleaned/ES_NO_cleaned.csv
     deps:
@@ -285,44 +285,44 @@ stages:
     cmd: python src/data/clean_data.py data/interim/updated/ES_PM2.5_updated.csv data/interim/cleaned/ES_PM2.5_cleaned.csv
     deps:
     - path: data/interim/updated/
-      md5: 14f953bab5a2dedff9c05ba970ff661a.dir
-      size: 18998645
+      md5: 49c20cf1384161c1aaaebaeb3c077c3a.dir
+      size: 18998655
       nfiles: 7
     - path: src/data/clean_data.py
       md5: 01d71e8a381723cdb016544d772d053c
       size: 1420
     outs:
     - path: data/interim/cleaned/ES_PM2.5_cleaned.csv
-      md5: 248d32cbe9f17c36d1b4e31acb98aaa8
-      size: 3242403
+      md5: b04d479a32f3c877bdda2481d57d3e79
+      size: 3245692
   clean_data@PM10:
     cmd: python src/data/clean_data.py data/interim/updated/ES_PM10_updated.csv data/interim/cleaned/ES_PM10_cleaned.csv
     deps:
     - path: data/interim/updated/
-      md5: 14f953bab5a2dedff9c05ba970ff661a.dir
-      size: 18998645
+      md5: 49c20cf1384161c1aaaebaeb3c077c3a.dir
+      size: 18998655
       nfiles: 7
     - path: src/data/clean_data.py
       md5: 01d71e8a381723cdb016544d772d053c
       size: 1420
     outs:
     - path: data/interim/cleaned/ES_PM10_cleaned.csv
-      md5: 76386cec70fab5d1f4cd846a3dfbb40c
-      size: 3247677
+      md5: 9b02ce2030bdd5e1de232633dcc7b2fe
+      size: 3250963
   clean_data@NO2:
     cmd: python src/data/clean_data.py data/interim/updated/ES_NO2_updated.csv data/interim/cleaned/ES_NO2_cleaned.csv
     deps:
     - path: data/interim/updated/
-      md5: 14f953bab5a2dedff9c05ba970ff661a.dir
-      size: 18998645
+      md5: 49c20cf1384161c1aaaebaeb3c077c3a.dir
+      size: 18998655
       nfiles: 7
     - path: src/data/clean_data.py
       md5: 01d71e8a381723cdb016544d772d053c
       size: 1420
     outs:
     - path: data/interim/cleaned/ES_NO2_cleaned.csv
-      md5: 14797b080cb81f2984549118b3118e89
-      size: 3183990
+      md5: a491ad5ff26381c5ab41a0e2207a59eb
+      size: 3187200
   load_historical_data@CO:
     cmd: python src/data/data_loading_historical.py data/raw/ CO 8
     deps:
@@ -446,8 +446,8 @@ stages:
     cmd: python src/features/data_preprocessing.py data/interim/cleaned/ data/processed/AQI_dataset.csv
     deps:
     - path: data/interim/cleaned/
-      md5: 570ea5af8430c939cfe7ea0e6296268e.dir
-      size: 19197971
+      md5: 19c3ede487004be4204728082c906bf2.dir
+      size: 19217385
       nfiles: 7
     - path: metadata/metadata_pollutants.yaml
       md5: c4a0c96a554f59ed6dbf93850bbada3e
@@ -457,52 +457,52 @@ stages:
       size: 9358
     outs:
     - path: data/processed/AQI_dataset.csv
-      md5: d76dd276e245faa17c57904fb178ed5a
-      size: 3683427
+      md5: a562bbef7560f13cc98d6a1239f690f9
+      size: 3684555
   prepare_dataset:
     cmd: python src/models/prepare_datasets.py 4 data/processed/AQI_dataset.csv data/processed/train.csv
       data/processed/test.csv
     deps:
     - path: data/processed/AQI_dataset.csv
-      md5: d76dd276e245faa17c57904fb178ed5a
-      size: 3683427
+      md5: a562bbef7560f13cc98d6a1239f690f9
+      size: 3684555
     - path: src/models/prepare_datasets.py
       md5: ec2e83bd727e0b8dad7180b1860b31c4
       size: 1310
     outs:
     - path: data/processed/test.csv
-      md5: 300ac25777c58324397ff68809c0b60d
-      size: 94990
+      md5: 502ed60bafc3a9bd83f0ca4bb4e46520
+      size: 95001
     - path: data/processed/train.csv
-      md5: a5bb4a1c9ad29f4de8060d43090d47f7
-      size: 318192
+      md5: 8ea48eb61b2d400e75d0d737397ed516
+      size: 318661
   train:
     cmd: python src/models/train.py  data/processed/train.csv data/processed/test.csv
       models/model.clf
     deps:
     - path: data/processed/test.csv
-      md5: 300ac25777c58324397ff68809c0b60d
-      size: 94990
+      md5: 502ed60bafc3a9bd83f0ca4bb4e46520
+      size: 95001
     - path: data/processed/train.csv
-      md5: a5bb4a1c9ad29f4de8060d43090d47f7
-      size: 318192
+      md5: 8ea48eb61b2d400e75d0d737397ed516
+      size: 318661
     - path: src/models/train.py
-      md5: 2c0761a1f8812698b07b4ee355c6839b
+      md5: 257a16554ebd136c5293a9acae34227d
       size: 3007
     outs:
     - path: models/model.clf
-      md5: 2ebd029513fc537e06da69108bc3c04d
-      size: 3049
+      md5: a13af118b2f753e7b5147ac7eea065ed
+      size: 3596
   evaluate:
     cmd: python src/models/evaluate.py  data/processed/test.csv models/model.clf reports/scores.json
     deps:
     - path: models/model.clf
-      md5: 2ebd029513fc537e06da69108bc3c04d
-      size: 3049
+      md5: a13af118b2f753e7b5147ac7eea065ed
+      size: 3596
     - path: src/models/evaluate.py
-      md5: 14e62831fe953c36eb7a80dfda4c1b3b
+      md5: 40d371edd31c31cd8978ded036d3fdb6
       size: 958
     outs:
     - path: reports/scores.json
-      md5: fa38c582c609cb0df1a4e8415301cde5
+      md5: 6aaca61df224b69267db83f6a178d950
       size: 54
