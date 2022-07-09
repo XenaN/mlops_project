@@ -12,6 +12,7 @@ from .features.experiments import (
     choose_day_number,
     search_best_params,
     predict_best_model,
+    create_x_y_datasets,
 )
 from .models.train import train
 from .models.prepare_datasets import prepare_dataset

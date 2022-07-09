@@ -104,4 +104,4 @@ def predict_best_model(
     best_rmse = mean_squared_error(y_test, predictions, squared=False)
     best_mae = mean_absolute_error(y_test, predictions)
 
-    return best_rmse, best_mae
+    return predictions, best_rmse, best_mae
