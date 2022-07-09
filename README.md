@@ -64,9 +64,12 @@ pre-commit install
 - **metadata**   - meta information for scripts
 - **models**     - trained and serialized models, model predictions, or model summaries
 - **notebooks**  - jupyter notebooks
+- **references** - paper for research
 - **reports**    - generated analysis
 - **src**        - source code for use in this project
+  - **app** - script for model service with fastapi
   - **data**     - scripts to download or generate data
   - **features** - scripts to turn raw data into features for modeling
   - **models**   - scripts to train models and then use trained models to make predictions
-  - **visualisation** - scripts to create exploratory and results oriented visualizations
+
+Any information about docker containers, model service or experiments you can find in Wiki.

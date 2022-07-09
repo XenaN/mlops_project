@@ -11,7 +11,6 @@ pandas = "^1.4.2"
 requests = "^2.27.1"
 black = "^22.3.0"
 flake8 = "^4.0.1"
-jupyterlab = "^3.4.2"
 matplotlib = "^3.5.2"
 seaborn = "^0.11.2"
 mlflow = "^1.26.0"
@@ -26,6 +25,7 @@ pytest = "^7.1.2"
 great-expectations = "^0.15.7"
 pre-commit = "^2.19.0"
 xgboost = "^1.6.1"
+jupyterlab = "^3.4.3"
 
 [tool.poetry.dev-dependencies]
 
