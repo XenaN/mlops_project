@@ -143,9 +143,9 @@
                 <div class="col-lg-3 col-sm-6">
                     <div class="card gradient-1">
                         <div class="card-body">
-                            <h3 class="card-title text-white">Metric 1</h3>
+                            <h3 class="card-title text-white">AQI Tomorrow</h3>
                             <div class="d-inline-block">
-                                <h2 class="text-white">5000</h2>
+                                <h2 class="text-white">{{ '%.2f' % data['datasets'][0]['data'][-1] }}</h2>
                                 <p class="text-white mb-0">Jan - March 2019</p>
                             </div>
                             <!--                                <span class="float-right display-5 opacity-5"><i class="fa fa-shopping-cart"></i></span>-->
@@ -155,9 +155,9 @@
                 <div class="col-lg-3 col-sm-6">
                     <div class="card gradient-2">
                         <div class="card-body">
-                            <h3 class="card-title text-white">Metric 2</h3>
+                            <h3 class="card-title text-white">Color Tomorrow</h3>
                             <div class="d-inline-block">
-                                <h2 class="text-white">8000</h2>
+                                <h2 class="text-white">Green</h2>
                                 <p class="text-white mb-0">Jan - March 2019</p>
                             </div>
                         </div>
@@ -166,9 +166,9 @@
                 <div class="col-lg-3 col-sm-6">
                     <div class="card gradient-3">
                         <div class="card-body">
-                            <h3 class="card-title text-white">Metric 3</h3>
+                            <h3 class="card-title text-white">Level Tomorrow</h3>
                             <div class="d-inline-block">
-                                <h2 class="text-white">4565</h2>
+                                <h2 class="text-white">Good</h2>
                                 <p class="text-white mb-0">Jan - March 2019</p>
                             </div>
                         </div>
@@ -177,9 +177,9 @@
                 <div class="col-lg-3 col-sm-6">
                     <div class="card gradient-4">
                         <div class="card-body">
-                            <h3 class="card-title text-white">Metric 4</h3>
+                            <h3 class="card-title text-white">Level Today</h3>
                             <div class="d-inline-block">
-                                <h2 class="text-white">99%</h2>
+                                <h2 class="text-white">Good</h2>
                                 <p class="text-white mb-0">Jan - March 2019</p>
                             </div>
                         </div>
@@ -194,7 +194,7 @@
                             <div class="card">
                                 <div class="card-body pb-0 d-flex justify-content-between">
                                     <div>
-                                        <h4 class="mb-1">AQI Chart</h4>
+                                        <h4 class="mb-1">AQI</h4>
                                         <!--                                            <p>Subtext</p>-->
                                         <h3 class="m-0">{{ '%.2f' % data['datasets'][0]['data'][-1] }}</h3>
                                     </div>

@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 import joblib
 import numpy
@@ -10,11 +11,15 @@ from fastapi.templating import Jinja2Templates
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount(
+    "/static",
+    StaticFiles(directory=Path(__file__).parent.joinpath("static")),
+    name="static",
+)
 
-with open("model.clf", "rb") as f:
+with open(Path(__file__).parent.joinpath("model.clf"), "rb") as f:
     model = joblib.load(f)
-with open("dataset.csv") as f:
+with open(Path(__file__).parent.joinpath("dataset.csv")) as f:
     df = pandas.read_csv(f)
 aqi_fact = df["AQI"].tolist()
 df = df.drop(columns=["AQI"])
@@ -42,7 +47,7 @@ full_data = {
 }
 
 
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=Path(__file__).parent.joinpath("templates"))
 
 
 @app.get("/")
@@ -53,7 +58,9 @@ async def read_item(request: Request):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app,
-                host=os.getenv('SERVICE_HOST', '0.0.0.0'),
-                port=int(os.getenv('SERVICE_PORT', 8000)),
-                workers=int(os.getenv('SERVICE_WORKERS', '1')))
+    uvicorn.run(
+        app,
+        host=os.getenv("SERVICE_HOST", "0.0.0.0"),
+        port=int(os.getenv("SERVICE_PORT", 8000)),
+        workers=int(os.getenv("SERVICE_WORKERS", "1")),
+    )
