@@ -1,9 +1,9 @@
-# MLops project
+# AQI prediction
 
 **This is study project for learning some ML technic elemets.**
 
-### About project
-There are many pollutants in the air that worsen the quality of life of people. We can monitor some of them or all. In this case, we choose to use Air Quality Index instead of several pollutants. If you want you can read the article from references to understand which diseases are connected with one or another pollutant.
+### Task
+There are many pollutants in the air that worsen the quality of life of people. It's important to know about future air pollution. In this case we will find the best model to forecast it. For predicting we can monitor some pollutants or all. Here we choose to use Air Quality Index instead of several pollutants. If you want you can read the article from references to understand which diseases are connected with one or another pollutant.
 
 Some points which you should know:
 For calculation AQI we use ozone, SO2, NO2, CO, and PM10, PM2.5. The last ones are airborne particulate matter (PM). Those with a diameter of 10 microns or less (PM10) are inhalable into the lungs and can induce adverse health effects. Fine particulate matter is defined as particles that are 2.5 microns or less in diameter (PM2.5). Therefore, PM2.5 comprises a portion of PM10.
