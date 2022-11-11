@@ -67,20 +67,22 @@ poetry shell
 ```commandline
 dvc repro
 ```
-5. Go to http://127.0.0.1:8000/ and look at statistics and prediction.
+5. Run
 ```
 python service/main.py
 ```
+6. Go to http://127.0.0.1:8000/ and look at statistics and prediction.
 
 #### Easy way to run
 1. Install several libs
 ```
 pip install service/requirements.txt
 ```
-2. Go to http://127.0.0.1:8000/ and look at statistics and prediction. Because there is saved model in repo.
+2. Run
 ```
 python service/main.py
 ```
+3. Go to http://127.0.0.1:8000/ and look at statistics and prediction. Because there is saved model in repo.
 
 Here you will see previous data and prediction for next day.
 
