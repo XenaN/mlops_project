@@ -24,7 +24,13 @@ with open(Path(__file__).parent.joinpath("dataset.csv")) as f:
 aqi_fact = df["AQI"].tolist()
 df = df.drop(columns=["AQI"])
 
-labels = numpy.arange(1, df.shape[0]).tolist()
+labels = numpy.datetime_as_string(
+    numpy.arange(
+        numpy.datetime64("2021-11-06"),
+        numpy.datetime64("2022-05-28"),
+        dtype="datetime64[D]",
+    )
+).tolist()
 data = model.predict(df).tolist()
 
 fact = {
