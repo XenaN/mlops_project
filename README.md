@@ -52,8 +52,9 @@ Research experiments you can read in notebooks/AQI_analysis.ipynb
 
 Any information about docker containers, model service or experiments you can find in Wiki.
 
-### How to use for experiments:
-1. Download data from [link](https://drive.google.com/file/d/1wszz5UflHTDC9qGI7CdD5DGPFTmd1E9a/view?usp=share_link) and put it in *data/raw*.
+### How to use:
+#### Full way (if you want to reproduce whole pipeline) 
+1. Download data (about 9 Gb unziped) from [link](https://drive.google.com/file/d/1wszz5UflHTDC9qGI7CdD5DGPFTmd1E9a/view?usp=share_link) and put it in *data/raw*.
 2. After creation venv istall all libraries
 ```commandline
 poetry install
@@ -66,11 +67,22 @@ poetry shell
 ```commandline
 dvc repro
 ```
-5. Go to localhost and look at statistics and prediction.
+5. Go to http://127.0.0.1:8000/ and look at statistics and prediction.
+```
+python service/main.py
+```
 
 #### Easy way to run
-Just go to localhost and look at statistics and prediction. Because there is saved model in repo.
+1. Install several libs
+```
+pip install service/requirements.txt
+```
+2. Go to http://127.0.0.1:8000/ and look at statistics and prediction. Because there is saved model in repo.
+```
+python service/main.py
+```
 
+Here you will see previous data and prediction for next day.
 
 ### Experiments
 This is old project. Base models was tested some time ago.  Now we added CatBoost and some DL model.
